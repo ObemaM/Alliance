@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALLIANCE - Саморезы</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="icons/free-icon-brick-1200825.png">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <div class="logo">
+                    <a href="index.html" class="logo__link">
+                        <span class="logo__text">ALLIANCE</span>
+                        <span class="logo__subtext">крепёжные решения</span>
+                    </a>
+                </div>
+                <nav class="nav">
+                    <a href="index.html#products" class="nav__link">Каталог</a>
+                    <a href="index.html#about" class="nav__link">О компании</a>
+                    <a href="index.html#contacts" class="nav__link">Контакты</a>
+                    <a href="#contacts" class="nav__link">Обратная связь</a>
+                </nav>
+                <div class="header__phone">
+                    <a href="tel:+79991234567" class="phone__link">+7 (999) 123-45-67</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section products-page">
+            <div class="container">
+                <h1 class="section__title">Саморезы</h1>
+                
+                <div class="product-filters">
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="roofing">Кровельные</button>
+                    <button class="filter-btn" data-filter="drywall">Для гипсокартона</button>
+                    <button class="filter-btn" data-filter="metal">По металлу</button>
+                    <button class="filter-btn" data-filter="universal">Универсальные</button>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory__title">Кровельные саморезы</h3>
+                    <div class="product-grid">
+                        <!-- Карточки кровельных саморезов с data-category="roofing" -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Саморез кровельный.png" alt="Саморез кровельный 4.8х19">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Саморез кровельный 4.8х19</h3>
+                                <p class="product-card__desc">Для крепления металлочерепицы к деревянной обрешетке</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 19 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Покрытие:</strong> Оцинкованные</li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 6 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Саморез кровельный.png" alt="Саморез кровельный 4.8х50">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Саморез кровельный 4.8х50</h3>
+                                <p class="product-card__desc">Для крепления металлочерепицы к деревянной обрешетке</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 50 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Покрытие:</strong> Оцинкованные</li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 7 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Саморез кровельный.png" alt="Саморез кровельный 4.8х50">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Саморез кровельный 4.8х35</h3>
+                                <p class="product-card__desc">Для крепления металлочерепицы к деревянной обрешетке</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 35 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Покрытие:</strong> Оцинкованные</li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 8 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Саморез кровельный.png" alt="Саморез кровельный 4.8х29">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Саморез кровельный 4.8х29</h3>
+                                <p class="product-card__desc">Для крепления металлочерепицы к деревянной обрешетке</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 29 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Покрытие:</strong> Оцинкованные</li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 12 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL .png" alt="Кровельный саморез RAL 3005 29 мм ">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 3005 29 мм </h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 29 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-3005"></span>
+                                        RAL 3005
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 13 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL .png" alt="Кровельный саморез RAL 3005 70 мм ">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 3005 70 мм </h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 70 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-3005"></span>
+                                        RAL 3005
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 13 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 2.png" alt="Кровельный саморез RAL 7024 29 мм ">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 7024 29 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 29 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-7024"></span>
+                                        RAL 7024
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 13 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 2.png" alt="Кровельный саморез RAL 7024 70 мм ">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 7024 70 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 70 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-7024"></span>
+                                        RAL 7024
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                            <!-- Карточка товара 15 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 3.png" alt="Кровельный саморез RAL 5005 29 мм ">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 5005 29 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 29 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-5005"></span>
+                                        RAL 5005
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 16 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 3.png" alt="Кровельный саморез RAL 5005 70 мм ">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 5005 70 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 70 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-5005"></span>
+                                        RAL 5005
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 17 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 3.png" alt="Кровельный саморез RAL 5005 70 мм ">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 5005 70 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 70 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-5005"></span>
+                                        RAL 5005
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 18 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 4.png" alt="Кровельный саморез RAL 6005 70 мм">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 6005 70 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 70 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-6005"></span>
+                                        RAL 6005
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 19 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 4.png" alt="Кровельный саморез RAL 6005 29 мм">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 6005 29 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 29 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-6005"></span>
+                                        RAL 6005
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 20 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 5.png" alt="Кровельный саморез RAL 8017 70 мм">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 8017 70 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 70 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-8017"></span>
+                                        RAL 8017 
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 21 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 5.png" alt="Кровельный саморез RAL 8017 29 мм">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 8017 29 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 29 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-8017"></span>
+                                        RAL 8017 
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Карточка товара 22 -->
+                        <div class="product-card" data-category="roofing">
+                            <div class="product-card__image">
+                                <img src="images/Кровельный саморез RAL 5.png" alt="Кровельный саморез RAL 8017 35 мм">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Кровельный саморез RAL 8017 35 мм</h3>
+                                <p class="product-card__desc">Саморезы кровельные с шестигранной головкой, шайбой с резиновой уплотняющей прокладкой и сверлом, на конце, позволяющим осуществлять монтаж без предварительного засверливания, предназначены для крепления листов металлочерепицы и комплектующих, а также профнастила к деревянному каркасу.</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 4.8 мм</li>
+                                    <li><strong>Длина:</strong> 35 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Цвет:</strong> 
+                                        <span class="color-swatch ral-8017"></span>
+                                        RAL 8017 
+                                    </li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory__title">Саморезы для гипсокартона</h3>
+                    <div class="product-grid">
+                        <!-- Карточка товара 1 -->
+                    <div class="product-card" data-category="drywall">
+                        <div class="product-card__image">
+                            <img src="images/Саморезы ГД .png" alt="Саморез ГД 3.5 х 41">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Саморез ГД 3.5 х 41</h3>
+                            <p class="product-card__desc">Для крепления гипсокартона к металлическому профилю</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 3.5 мм</li>
+                                <li><strong>Длина:</strong> 41 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Покрытие:</strong> Фосфатированные</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 2 -->
+                    <div class="product-card" data-category="drywall">
+                        <div class="product-card__image">
+                            <img src="images/Саморезы ГД .png" alt="Саморез ГД 3.5 х 51">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Саморез ГД 3.5 х 51</h3>
+                            <p class="product-card__desc">Для крепления гипсокартона к металлическому профилю</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 3.5 мм</li>
+                                <li><strong>Длина:</strong> 51 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Покрытие:</strong> Фосфатированные</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 3 -->
+                    <div class="product-card" data-category="drywall">
+                        <div class="product-card__image">
+                            <img src="images/Саморезы ГД .png" alt="Саморез ГД 3.5 х 25">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Саморез ГД 3.5 х 25</h3>
+                            <p class="product-card__desc">Для крепления гипсокартона к металлическому профилю</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 3.5 мм</li>
+                                <li><strong>Длина:</strong> 15 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Покрытие:</strong> Фосфатированные</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 4 -->
+                    <div class="product-card" data-category="drywall">
+                        <div class="product-card__image">
+                            <img src="images/Саморезы ГД .png" alt="Саморез ГД 4.2 х 75">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Саморез ГД 4.2 х 75</h3>
+                            <p class="product-card__desc">Для крепления гипсокартона к металлическому профилю</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 4.2 мм</li>
+                                <li><strong>Длина:</strong> 75 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Покрытие:</strong> Фосфатированные</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="subcategory">
+                    <h3 class="subcategory__title">Саморезы по металлу</h3>
+                    <div class="product-grid">
+                       <!-- Карточка товара 9 -->
+                    <div class="product-card" data-category="metal">
+                        <div class="product-card__image">
+                            <img src="images/Саморез для тонких пластин .png" alt="Саморез 4.2x32 мм ">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Саморез для тонких пластин 4.2x32 мм </h3>
+                            <p class="product-card__desc">Для кровельных листов, Для металла, Для металлического профиля, Для монтажа, Для сборки</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 4.2 мм</li>
+                                <li><strong>Длина:</strong> 32 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Покрытие:</strong> Оцинкованные</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 10 -->
+                    <div class="product-card" data-category="metal">
+                        <div class="product-card__image">
+                            <img src="images/Саморез для тонких пластин .png" alt="Саморез 4.2x13 мм ">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Саморез для тонких пластин 4.2x13 мм </h3>
+                            <p class="product-card__desc">Для кровельных листов, Для металла, Для металлического профиля, Для монтажа, Для сборки</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 4.2 мм</li>
+                                <li><strong>Длина:</strong> 13 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Покрытие:</strong> Оцинкованные</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price"> ₽/шт</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 11 -->
+                    <div class="product-card" data-category="metal">
+                        <div class="product-card__image">
+                            <img src="images/Саморез для тонких пластин .png" alt="Саморез 4.2x25 мм ">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Саморез для тонких пластин 4.2x25 мм </h3>
+                            <p class="product-card__desc">Для кровельных листов, Для металла, Для металлического профиля, Для монтажа, Для сборки</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 4.2 мм</li>
+                                <li><strong>Длина:</strong> 25 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Покрытие:</strong> Оцинкованные</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="subcategory">
+                    <h3 class="subcategory__title">Саморезы универсальные</h3>
+                    <div class="product-grid">
+                        <div class="product-card" data-category="universal">
+                            <div class="product-card__image">
+                                <img src="images/Саморезы универсальные.png" alt="Саморезы универсальные оцинкованные 3,0х16 ">
+                            </div>
+                            <div class="product-card__content">
+                                <h3 class="product-card__title">Саморезы универсальные оцинкованные 3,0х16 </h3>
+                                <p class="product-card__desc">Для соединения деревянных элементов, гипсокартонных плит, тонкого листового металла и других материалов; для сквозного монтажа конструкций к деревянным основаниям, а также совместно с дюбелями шурупы универсальные используются для монтажа в пустотелые и полнотелые основания</p>
+                                <ul class="product-card__specs">
+                                    <li><strong>Диаметр:</strong> 3 мм</li>
+                                    <li><strong>Длина:</strong> 16 мм</li>
+                                    <li><strong>Материал:</strong> Сталь</li>
+                                    <li><strong>Покрытие:</strong> Оцинкованные</li>
+                                    <li><strong>Цвет:</strong> Серебристый</li>
+                                </ul>
+                                <div class="product-card__footer">
+                                    <span class="product-card__price">₽/уп. ( шт)</span>
+                                    <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contacts" class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__col">
+                    <div class="logo logo--footer">
+                        <span class="logo__text">ALLIANCE</span>
+                        <span class="logo__subtext">крепёжные решения</span>
+                    </div>
+                    <p class="footer__copyright">© 2023 Все права защищены</p>
+                </div>
+                <div class="footer__col">
+                    <h3 class="footer__title">Контакты</h3>
+                    <address class="footer__contacts">
+                        <address class="footer__contacts">
+                            <p>г. Санкт-Петербург, Красногвардейский район</p>
+                            <p><a href="tel:+79991234567" class="contact-link">📞 +7 (999) 123-45-67</a></p>
+                            <p><a href="mailto:info@alliance.ru" class="contact-link">✉️ info@alliance.ru</a></p>
+                        </address>
+                        <div class="social-links">
+                            <a href="https://vk.com/alliance" target="_blank" class="social-link" aria-label="ВКонтакте">
+                                <svg class="social-icon"><use xlink:href="#icon-vk"></use></svg>
+                            </a>
+                            <a href="https://wa.me/79991234567" target="_blank" class="social-link" aria-label="WhatsApp">
+                                <svg class="social-icon"><use xlink:href="#icon-whatsapp"></use></svg>
+                            </a>
+                            <a href="https://t.me/alliance_company" target="_blank" class="social-link" aria-label="Telegram">
+                                <svg class="social-icon"><use xlink:href="#icon-telegram"></use></svg>
+                            </a>
+                        </div>
+                    </address>
+                </div>
+                <div class="footer__col">
+                    <h3 class="footer__title">Режим работы</h3>
+                    <p>Круглосуточно: на связи 24/7</p>
+                </div>
+            </div>
+        </div>
+        <svg style="display: none;">
+            <!-- Иконка VK -->
+            <symbol id="icon-vk" viewBox="0 0 24 24">
+                <path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.949 2.059-1.604 1.488 1.488 1.796 2.519 3.603 2.519h3.2c.808 0 1.126-.26 1.126-.668 0-.863-1.421-2.386-2.625-3.504-1.686-1.565-1.765-1.602-.313-3.486 1.801-2.339 4.157-5.336 2.073-5.336h-3.981c-.772 0-.828.435-1.103 1.083-.995 2.347-2.886 5.387-3.604 4.922-.751-.485-.407-2.406-.35-5.261.015-.754.011-1.271-1.141-1.539-.629-.145-1.241-.205-1.809-.205-2.273 0-3.841.953-2.95 1.119 1.571.293 1.42 3.692 1.054 5.16-.638 2.556-3.036-2.024-4.035-4.022-.483-.957-1.255-.962-1.49-.962h-3.255c-.749 0-.9.368-.9.653 0 .896 2.749 5.871 5.406 8.727 2.206 2.371 5.307 2.727 6.953 2.727z"/>
+            </symbol>
+            <!-- Иконка WhatsApp -->
+            <symbol id="icon-whatsapp" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297a11.815 11.815 0 00-8.415-3.48c-6.627 0-12.015 5.389-12.015 12.01 0 2.237.614 4.364 1.727 6.216l-1.157 4.226 4.31-1.128a11.98 11.98 0 005.519 1.355h.005c6.627 0 12.014-5.389 12.014-12.012 0-3.21-1.257-6.226-3.538-8.487"/>
+            </symbol>
+            <!-- Иконка Telegram -->
+            <symbol id="icon-telegram" viewBox="0 0 24 24">
+                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+            </symbol>
+        </svg>
+    </footer>
+    <script>
+        // Фильтрация товаров
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Удаляем активный класс у всех кнопок
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        // Добавляем активный класс текущей кнопке
+        this.classList.add('active');
+        
+        const filter = this.getAttribute('data-filter');
+        
+        if (filter === 'all') {
+            // Показываем все товары
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.style.display = 'block';
+            });
+            document.querySelectorAll('.subcategory').forEach(sub => {
+                sub.style.display = 'block';
+            });
+        } else {
+            // Скрываем все подкатегории
+            document.querySelectorAll('.subcategory').forEach(sub => {
+                sub.style.display = 'none';
+            });
+            
+            // Показываем только соответствующие товары
+            document.querySelectorAll('.product-card').forEach(card => {
+                if (card.getAttribute('data-category') === filter) {
+                    card.style.display = 'block';
+                    // Показываем родительскую подкатегорию
+                    card.closest('.subcategory').style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    });
+});
+    </script>
+</body>
+</html>

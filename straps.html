@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALLIANCE - Стяжки и шнуры</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="icons/free-icon-brick-1200825.png">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <div class="logo">
+                    <a href="index.html" class="logo__link">
+                        <span class="logo__text">ALLIANCE</span>
+                        <span class="logo__subtext">крепёжные решения</span>
+                    </a>
+                </div>
+                <nav class="nav">
+                    <a href="index.html#products" class="nav__link">Каталог</a>
+                    <a href="index.html#about" class="nav__link">О компании</a>
+                    <a href="index.html#contacts" class="nav__link">Контакты</a>
+                    <a href="#contacts" class="nav__link">Обратная связь</a>
+                </nav>
+                <div class="header__phone">
+                    <a href="tel:+79991234567" class="phone__link">+7 (999) 123-45-67</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section products-page">
+            <div class="container">
+                <h1 class="section__title">Стяжки и шнуры</h1>
+                 <!-- Основные фильтры -->
+                 <div class="product-filters">
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="ropes">Шнуры и верёвки</button>
+                    <button class="filter-btn" data-filter="furniture">Мебельные стяжки</button>
+                    <button class="filter-btn" data-filter="toys">Игрушки</button>
+                </div>
+                
+                <!-- Подфильтры для мебельных стяжек -->
+                <div class="subfilters" id="furniture-subfilters" style="display: none;">
+                    <button class="subfilter-btn active" data-subfilter="furniture-all">Все</button>
+                    <button class="subfilter-btn" data-subfilter="furniture-butterfly">Бабочка</button>
+                    <button class="subfilter-btn" data-subfilter="furniture-swallowtail">Ласточкин хвост</button>
+                    <button class="subfilter-btn" data-subfilter="furniture-screw">Шурупные</button>
+                    <button class="subfilter-btn" data-subfilter="furniture-intersection">Межсекционные</button>
+                </div>
+                
+                <!-- Подфильтры для шнуров и верёвок -->
+                <div class="subfilters" id="ropes-subfilters" style="display: none;">
+                    <button class="subfilter-btn active" data-subfilter="ropes-all">Все</button>
+                    <button class="subfilter-btn" data-subfilter="ropes-polypropylene">Полипропилен</button>
+                    <button class="subfilter-btn" data-subfilter="ropes-polyamide">Полиамид</button>
+                    <button class="subfilter-btn" data-subfilter="ropes-jute">Джут</button>
+                </div>
+                
+                <div class="subcategory">
+                    <h3 class="subcategory__title">Шнуры и Шпагаты</h3>
+                <div class="product-grid">
+                    <!-- Карточка товара 1 -->
+                    <div class="product-card" data-category="ropes" data-subcategory="ropes-polypropylene">
+                        <div class="product-card__image">
+                            <img src="images/Шпагат.png" alt="Шпагат полипропиленовый ленточный">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Шпагат полипропиленовый ленточный 1200 текс белый (110 м)</h3>
+                            <p class="product-card__desc">Формировать узлы с помощью шпагата очень удобно, благодаря рельефной фактуре. как упаковочный материал и материал для обвязки тюков для прессования сена</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Длина:</strong> В одном рулоне 110 метров шпагата</li>
+                                <li><strong>Материал:</strong> Полипропиленовая фибрилированная пленочная нить</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price"> ₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 2 -->
+                    <div class="product-card" data-category="ropes" data-subcategory="ropes-polyamide">
+                        <div class="product-card__image">
+                            <img src="images/Нить.png" alt="Нить полиамид крученая">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Нить полиамид крученая 187 текс белая (250 м)</h3>
+                            <p class="product-card__desc">Вся канатно-веревочная продукция используется для хозяйственно-бытовых нужд, садоводства, народного промысла, рыболовства, туризма, упаковки и т.п.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 2 мм</li>
+                                <li><strong>Длина:</strong> 250 м</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 3 -->
+                    <div class="product-card" data-category="toys">
+                        <div class="product-card__image">
+                            <img src="images/игрушка.png" alt="Игрушка для собак верёвка-канат два узла">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Игрушка для собак верёвка-канат два узла</h3>
+                            <p class="product-card__desc">Собаки обожают играть с веревочными игрушками, так как их можно грызть, трепать и носить в зубах. Такие игрушки отлично массируют десны и очищают зубной налет во время игры.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Материал:</strong> Хлопок</li>
+                                <li><strong>Цвет:</strong> Белый</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 4 -->
+                    <div class="product-card" data-category="ropes" data-subcategory="ropes-jute">
+                        <div class="product-card__image">
+                            <img src="images/Канат.png" alt="Канат джутовый крученый 3,0 мм (30 м)">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Канат джутовый крученый 3,0 мм (30 м)</h3>
+                            <p class="product-card__desc">Джутовый канат, в отличие от большинства изделий из природного сырья, обладает устойчивостью к гниению, поэтому ему не требуется специальная пропитка для использования на открытом воздухе</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 3 мм</li>
+                                <li><strong>Длина:</strong> 30 м</li>
+                                <li><strong>Материал:</strong> Джут</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="subcategory">
+                <h3 class="subcategory__title">Стяжка Н</h3>
+                <div class="product-grid">
+                     <!-- Карточка товара 5 -->
+                     <div class="product-card" data-category="furniture" data-subcategory="furniture-butterfly">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка1.png" alt="Стяжка Н швеллер Бабочка Hoffmanna бежевый">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка Н швеллер Бабочка Hoffmanna бежевый</h3>
+                            <p class="product-card__desc">Стяжки используются при производстве мебели, окон, дверей, балконов, терасс.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Цвет:</strong> Бежевый</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 6-->
+                    <div class="product-card" data-category="furniture" data-subcategory="furniture-butterfly">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка2.png" alt="Стяжка Н швеллер Бабочка Hoffmanna белый">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка Н швеллер Бабочка Hoffmanna белый</h3>
+                            <p class="product-card__desc">Стяжки используются при производстве мебели, окон, дверей, балконов, терасс.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Цвет:</strong> Белый</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 7 -->
+                    <div class="product-card" data-category="furniture" data-subcategory="furniture-butterfly">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка3.png" alt="Стяжка Н швеллер Бабочка Hoffmanna черный">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка Н швеллер Бабочка Hoffmanna черный</h3>
+                            <p class="product-card__desc">Стяжки используются при производстве мебели, окон, дверей, балконов, терасс.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Цвет:</strong> черный</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="subcategory">
+                    <h3 class="subcategory__title">Стяжка X</h3>
+                    <div class="product-grid">
+                    <!-- Карточка товара 8 -->
+                    <div class="product-card" data-category="furniture" data-subcategory="furniture-swallowtail">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка6.png" alt="Стяжка Х Ласточкин хвост 14 мм без заглушки черный">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка Х Ласточкин хвост 14 мм без заглушки черный</h3>
+                            <p class="product-card__desc">Стяжки используются при производстве мебели, окон, дверей, балконов, терасс.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Цвет:</strong> черный</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 9 -->
+                    <div class="product-card" data-category="furniture" data-subcategory="furniture-swallowtail">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка5.png" alt="Стяжка Х Ласточкин хвост 14 мм без заглушки бук ">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка Х Ласточкин хвост 14 мм без заглушки бук</h3>
+                            <p class="product-card__desc">Стяжки используются при производстве мебели, окон, дверей, балконов, терасс.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Цвет:</strong>Бук</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 10 -->
+                    <div class="product-card" data-category="furniture" data-subcategory="furniture-swallowtail">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка4.png" alt="Стяжка Х Ласточкин хвост 14 мм без заглушки белый">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка Х Ласточкин хвост 14 мм без заглушки белый</h3>
+                            <p class="product-card__desc">Стяжки используются при производстве мебели, окон, дверей, балконов, терасс.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Цвет:</strong> Белый</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                    <div class="subcategory" dat>
+                        <h3 class="subcategory__title">Стяжка межсекционная</h3>
+                        <div class="product-grid">
+                    <!-- Карточка товара 11 -->
+                    <div class="product-card" data-category="furniture" data-subcategory="furniture-intersection">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка7.png" alt="Стяжка межсекционная никелированная 5х27 мм">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка межсекционная никелированная 5х27 мм</h3>
+                            <p class="product-card__desc">Предназначена для стягивания двух деталей из ДСП, в производстве корпусной мебели, при установке кухонных гарнитуров.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 5 мм</li>
+                                <li><strong>Длина:</strong> 27 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Цвет:</strong> Серебристый</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 12 -->
+                    <div class="product-card" data-category="furniture" data-subcategory="furniture-intersection">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка7.png" alt="Стяжка межсекционная никелированная 8х30 мм">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка межсекционная никелированная 8х30 мм</h3>
+                            <p class="product-card__desc">Предназначена для стягивания двух деталей из ДСП, в производстве корпусной мебели, при установке кухонных гарнитуров.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 8 мм</li>
+                                <li><strong>Длина:</strong> 30 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Цвет:</strong> Серебристый</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+                        <div class="subcategory">
+                            <h3 class="subcategory__title">Стяжка шурупная</h3>
+                            <div class="product-grid">
+                     <!-- Карточка товара 13 -->
+                     <div class="product-card" data-category="furniture" data-subcategory="furniture-screw">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка8.png" alt="Стяжка шурупная оцинкованная 5,0х50 HEX">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка шурупная оцинкованная 5,0х50 HEX</h3>
+                            <p class="product-card__desc">Стяжки  созданы специально для работы с ЛДСП. Обеспечивают оптимальное соединение деталей между собой.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 5 мм</li>
+                                <li><strong>Длина:</strong> 50 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Цвет:</strong> Серебристый</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 14 -->
+                    <div class="product-card" data-category="furniture" data-subcategory="furniture-screw">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка8.png" alt="Стяжка шурупная оцинкованная 7,0х50 HEX">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка шурупная оцинкованная 7,0х50 HEX</h3>
+                            <p class="product-card__desc">Стяжки  созданы специально для работы с ЛДСП. Обеспечивают оптимальное соединение деталей между собой.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 7 мм</li>
+                                <li><strong>Длина:</strong> 50 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Цвет:</strong> Серебристый</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Карточка товара 15 -->
+                    <div class="product-card" data-category="furniture" data-subcategory="furniture-screw">
+                        <div class="product-card__image">
+                            <img src="images/Стяжка8.png" alt="Стяжка шурупная оцинкованная 7,0х70 HEX">
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">Стяжка шурупная оцинкованная 7,0х70 HEX</h3>
+                            <p class="product-card__desc">Стяжки  созданы специально для работы с ЛДСП. Обеспечивают оптимальное соединение деталей между собой.</p>
+                            <ul class="product-card__specs">
+                                <li><strong>Диаметр:</strong> 7 мм</li>
+                                <li><strong>Длина:</strong> 70 мм</li>
+                                <li><strong>Материал:</strong> Сталь</li>
+                                <li><strong>Цвет:</strong> Серебристый</li>
+                            </ul>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">₽/уп. ( шт)</span>
+                                <a href="ваша_ссылка.html" class="btn btn--orange btn--small">Заказать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Добавьте остальные товары по аналогии -->
+                            </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contacts" class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__col">
+                    <div class="logo logo--footer">
+                        <span class="logo__text">ALLIANCE</span>
+                        <span class="logo__subtext">крепёжные решения</span>
+                    </div>
+                    <p class="footer__copyright">© 2023 Все права защищены</p>
+                </div>
+                <div class="footer__col">
+                    <h3 class="footer__title">Контакты</h3>
+                    <address class="footer__contacts">
+                        <address class="footer__contacts">
+                            <p>г. Санкт-Петербург, Красногвардейский район</p>
+                            <p><a href="tel:+79991234567" class="contact-link">📞 +7 (999) 123-45-67</a></p>
+                            <p><a href="mailto:info@alliance.ru" class="contact-link">✉️ info@alliance.ru</a></p>
+                        </address>
+                        <div class="social-links">
+                            <a href="https://vk.com/alliance" target="_blank" class="social-link" aria-label="ВКонтакте">
+                                <svg class="social-icon"><use xlink:href="#icon-vk"></use></svg>
+                            </a>
+                            <a href="https://wa.me/79991234567" target="_blank" class="social-link" aria-label="WhatsApp">
+                                <svg class="social-icon"><use xlink:href="#icon-whatsapp"></use></svg>
+                            </a>
+                            <a href="https://t.me/alliance_company" target="_blank" class="social-link" aria-label="Telegram">
+                                <svg class="social-icon"><use xlink:href="#icon-telegram"></use></svg>
+                            </a>
+                        </div>
+                    </address>
+                </div>
+                <div class="footer__col">
+                    <h3 class="footer__title">Режим работы</h3>
+                    <p>Круглосуточно: на связи 24/7</p>
+                </div>
+            </div>
+        </div>
+        <svg style="display: none;">
+            <!-- Иконка VK -->
+            <symbol id="icon-vk" viewBox="0 0 24 24">
+                <path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.949 2.059-1.604 1.488 1.488 1.796 2.519 3.603 2.519h3.2c.808 0 1.126-.26 1.126-.668 0-.863-1.421-2.386-2.625-3.504-1.686-1.565-1.765-1.602-.313-3.486 1.801-2.339 4.157-5.336 2.073-5.336h-3.981c-.772 0-.828.435-1.103 1.083-.995 2.347-2.886 5.387-3.604 4.922-.751-.485-.407-2.406-.35-5.261.015-.754.011-1.271-1.141-1.539-.629-.145-1.241-.205-1.809-.205-2.273 0-3.841.953-2.95 1.119 1.571.293 1.42 3.692 1.054 5.16-.638 2.556-3.036-2.024-4.035-4.022-.483-.957-1.255-.962-1.49-.962h-3.255c-.749 0-.9.368-.9.653 0 .896 2.749 5.871 5.406 8.727 2.206 2.371 5.307 2.727 6.953 2.727z"/>
+            </symbol>
+            <!-- Иконка WhatsApp -->
+            <symbol id="icon-whatsapp" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297a11.815 11.815 0 00-8.415-3.48c-6.627 0-12.015 5.389-12.015 12.01 0 2.237.614 4.364 1.727 6.216l-1.157 4.226 4.31-1.128a11.98 11.98 0 005.519 1.355h.005c6.627 0 12.014-5.389 12.014-12.012 0-3.21-1.257-6.226-3.538-8.487"/>
+            </symbol>
+            <!-- Иконка Telegram -->
+            <symbol id="icon-telegram" viewBox="0 0 24 24">
+                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+            </symbol>
+        </svg>
+    </footer>
+
+      <script>
+    function updateSubcategoriesVisibility() {
+        document.querySelectorAll('.subcategory').forEach(subcat => {
+            const visibleCards = Array.from(subcat.querySelectorAll('.product-card')).filter(c => c.style.display !== 'none');
+            subcat.style.display = visibleCards.length > 0 ? 'block' : 'none';
+        });
+    }
+
+    // Основная фильтрация
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const filter = this.getAttribute('data-filter');
+
+            // Скрываем все подфильтры
+            document.querySelectorAll('.subfilters').forEach(sub => {
+                sub.style.display = 'none';
+            });
+
+            // Показываем соответствующий подфильтр
+            if (filter === 'furniture') {
+                document.getElementById('furniture-subfilters').style.display = 'block';
+            } else if (filter === 'ropes') {
+                document.getElementById('ropes-subfilters').style.display = 'block';
+            }
+
+            // Фильтрация карточек
+            document.querySelectorAll('.product-card').forEach(card => {
+                if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            updateSubcategoriesVisibility();
+        });
+    });
+
+    // Подфильтрация
+    document.querySelectorAll('.subfilter-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const parentFilter = this.closest('.subfilters').id.replace('-subfilters', '');
+
+            // Удаляем active у всех подфильтров в этой группе
+            document.querySelectorAll(`#${parentFilter}-subfilters .subfilter-btn`).forEach(b => {
+                b.classList.remove('active');
+            });
+            this.classList.add('active');
+
+            const subfilter = this.getAttribute('data-subfilter');
+
+            document.querySelectorAll('.product-card').forEach(card => {
+                if (card.getAttribute('data-category') === parentFilter) {
+                    if (subfilter.endsWith('-all') || card.getAttribute('data-subcategory') === subfilter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+
+            updateSubcategoriesVisibility();
+        });
+    });
+</script>
+
+</body>
+</html>
