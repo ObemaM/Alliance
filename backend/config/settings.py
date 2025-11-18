@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0k8f9!%6%6o=6xnub^4zy^f(oh#u67%bp=uwmjz+4g-%w%2j8g'
+SECRET_KEY = 'django-insecure-^-*coytl#oi2#+184h4o)m8391(4j3v4(9)clyuvh&$ub%+3^8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -74,8 +74,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Alliance',           # Имя базы данных из docker-compose.yml
+        'USER': 'postgres',           # Пользователь из docker-compose.yml
+        'PASSWORD': 'alliance',       # Пароль из docker-compose.yml
+        'HOST': 'localhost',          # Хост (localhost, так как порт проброшен на хост)
+        'PORT': '5435',               # Порт, указанный в портах (5435:5432)
     }
 }
 
