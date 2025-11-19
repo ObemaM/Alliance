@@ -1,3 +1,3 @@
 @echo off
-cd D:\GitHub\Alliance\backend
-python manage.py runserver
+call venv\Scripts\activate.bat
+uvicorn main:app --reload

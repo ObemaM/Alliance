@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'main'
 ]
 
 MIDDLEWARE = [
@@ -75,11 +77,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Alliance',           # Имя базы данных из docker-compose.yml
-        'USER': 'postgres',           # Пользователь из docker-compose.yml
-        'PASSWORD': 'alliance',       # Пароль из docker-compose.yml
-        'HOST': 'localhost',          # Хост (localhost, так как порт проброшен на хост)
-        'PORT': '5435',               # Порт, указанный в портах (5435:5432)
+        'NAME': 'Alliance',
+        'USER': 'postgres',
+        'PASSWORD': 'alliance',
+        'HOST': 'localhost', 
+        'PORT': '5435',
     }
 }
 
