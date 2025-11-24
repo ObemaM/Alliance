@@ -1,27 +1,30 @@
-from typing import Annotated
-from fastapi import FastAPI, Body, Depends
-from pydantic import BaseModel
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+from config import settings
+from routes import countries_router
+from routes import colors_router
 
-class TTable(BaseModel):
-    sas: int
-    named: str | None = None
+app = FastAPI(
+    title=settings.app_name,
+    debug=settings.debug,
+)
 
-class TCountry (TTable):
-    id: int
-    name: str
+# Настройка CORS (разрешаем запросы с фронтенда)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-class TTaskAdd (TCountry):
-    gay: str
+# Подключаем роутеры
+app.include_router(countries_router)
+app.include_router(colors_router)
 
-tasks = []
+# Главная страница API
+@app.get("/")
+async def root():
+    return {"message": f"Welcome to {settings.app_name} API"}
 
-@app.post("/add")
-async def post_add(
-    task: Annotated[TTaskAdd, Depends()], # Двоеточие - подсказка типа, Depends() - зависимость
-):
-    tasks.append(task)
-    return tasks
-
-    
