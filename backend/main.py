@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from typing import Annotated
+from fastapi import FastAPI, Body, Depends
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -11,11 +12,16 @@ class TCountry (TTable):
     id: int
     name: str
 
-@app.get("/home")
-def get_home():
-    Check = Table(sas = 1, named = "Лох")
-    return f"Hello world {Check}"
+class TTaskAdd (TCountry):
+    gay: str
 
-@app.get("/countries")
-def get_countries():
-    return
+tasks = []
+
+@app.post("/add")
+async def post_add(
+    task: Annotated[TTaskAdd, Depends()], # Двоеточие - подсказка типа, Depends() - зависимость
+):
+    tasks.append(task)
+    return tasks
+
+    
