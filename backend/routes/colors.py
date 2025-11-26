@@ -15,7 +15,6 @@ async def get_all_colors(db: AsyncSession = Depends(get_db)):
     
     # Выполняем запрос асинхронно
     result = await db.execute(query)
-    
     # Получаем все записи
     colors = result.scalars().all()
     

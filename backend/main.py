@@ -5,6 +5,7 @@ from config import settings
 from routes import countries_router
 from routes import colors_router
 
+# Запуск - uvicorn main:app --reload
 app = FastAPI(
     title=settings.app_name,
     debug=settings.debug,
