@@ -1,0 +1,33 @@
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
+from database import get_db
+from models.country import Country
+from schemas.country import CountryResponse, CountryCreate
+
+# URL будут начинаться с /countries и будут относиться тегу (в документации) Countries
+router = APIRouter(prefix="/countries", tags=["Countries"])
+
+# Список элементов CountryResponse - list[CountryResponse]
+# Выбираем по какому эндпоинту надо обращаться
+@router.get("/", response_model=list[CountryResponse])
+async def get_all_countries(db: AsyncSession = Depends(get_db)):
+    # Создаем запрос для выбора всех стран
+    query = select(Country)
+    
+    # Выполняем запрос асинхронно
+    result = await db.execute(query)
+    
+    # Получаем все записи
+    countries = result.scalars().all()
+    
+    return countries
+
+@router.post("/", response_model=CountryResponse)
+async def create_country(country: CountryCreate, db: AsyncSession = Depends(get_db)):
+    new_country = Country(name=country.name)
+    db.add(new_country)
+    await db.commit()
+    await db.refresh(new_country)
+    return new_country
