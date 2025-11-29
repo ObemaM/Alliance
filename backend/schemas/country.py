@@ -6,3 +6,6 @@ class CountryResponse(BaseModel):
     
     class Config:
         from_attributes = True  # Позволяет создавать схему из ORM-модели
+
+class CountryCreate(BaseModel):
+    name: str

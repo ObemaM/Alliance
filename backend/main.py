@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from routes import countries_router
 from routes import colors_router
+from routes import categories_router
 
 # Запуск - uvicorn main:app --reload
 app = FastAPI(
@@ -23,6 +24,7 @@ app.add_middleware(
 # Подключаем роутеры
 app.include_router(countries_router)
 app.include_router(colors_router)
+app.include_router(categories_router)
 
 # Главная страница API
 @app.get("/")

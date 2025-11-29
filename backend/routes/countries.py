@@ -4,7 +4,7 @@ from sqlalchemy import select
 
 from database import get_db
 from models.country import Country
-from schemas.country import CountryResponse
+from schemas.country import CountryResponse, CountryCreate
 
 # URL будут начинаться с /countries и будут относиться тегу (в документации) Countries
 router = APIRouter(prefix="/countries", tags=["Countries"])
@@ -23,3 +23,11 @@ async def get_all_countries(db: AsyncSession = Depends(get_db)):
     countries = result.scalars().all()
     
     return countries
+
+@router.post("/", response_model=CountryResponse)
+async def create_country(country: CountryCreate, db: AsyncSession = Depends(get_db)):
+    new_country = Country(name=country.name)
+    db.add(new_country)
+    await db.commit()
+    await db.refresh(new_country)
+    return new_country

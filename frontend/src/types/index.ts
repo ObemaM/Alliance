@@ -11,3 +11,10 @@ export interface Color {
   name: string;
   code: string | null;
 }
+
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  parent_id: number | null;
+}
