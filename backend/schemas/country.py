@@ -9,3 +9,6 @@ class CountryResponse(BaseModel):
 
 class CountryCreate(BaseModel):
     name: str
+
+class CountryUpdate(BaseModel):
+    name: str | None = None
