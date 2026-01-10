@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance - Крепеж и строительные материалы</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        },
+                        secondary: {
+                            100: '#fed7aa',
+                            500: '#f97316',
+                            600: '#ea580c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-slideInRight {
+            animation: slideInRight 0.3s ease-out;
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.2s ease-out;
+        }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, useEffect } = React;
+        const { createRoot } = ReactDOM;
+
+        const COMPANY_INFO = {
+            name: "Alliance",
+            phone: "+7 (999) 123-45-67",
+            address: "г. Санкт-Петербург, Красногвардейский район",
+            logoText: "ALLIANCE"
+        };
+
+        const CATEGORIES = [
+            { id: '1', name: 'Все товары', slug: 'all' },
+            { id: '2', name: 'Крепеж', slug: 'fasteners' },
+            { id: '3', name: 'Кровля', slug: 'roofing' },
+            { id: '4', name: 'Такелаж', slug: 'rigging' },
+            { id: '5', name: 'Мебельная фурнитура', slug: 'furniture' },
+            { id: '6', name: 'Инструмент', slug: 'tools' },
+            { id: '7', name: 'Анкеры', slug: 'anchors' },
+        ];
+
+        const uuid = () => Math.random().toString(36).substring(2, 9);
+
+        const INITIAL_PRODUCTS = [
+            {
+                id: uuid(),
+                name: "Рубанок для газобетона",
+                price: 1250,
+                description: "Профессиональный инструмент для выравнивания блоков из газобетона.",
+                inStock: true,
+
+            },
+            {
+                id: uuid(),
+                name: "Саморезы ГД 3.5 х 41",
+                price: 0.85,
+                description: "Гипсокартон-Дерево, фосфатированные.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Саморезы ГД 3.5 х 51",
+
+                price: 1.10,
+                description: "Гипсокартон-Дерево, усиленные.",
+                inStock: true,
+      
+            },
+            {
+                id: uuid(),
+                name: "Саморезы ГД 3.5 х 25",
+
+                price: 0.50,
+                description: "Стандартный крепеж для ГКЛ.",
+                inStock: true,
+
+            },
+            {
+                id: uuid(),
+                name: "Шпагат полипропиленовый ленточный 1200 текс (110 м)",
+                price: 180,
+                description: "Прочный белый шпагат для упаковки и хозяйственных нужд.",
+                inStock: true,
+
+            },
+            {
+                id: uuid(),
+                name: "Нить полиамид крученая 187 текс белая (250 м)",
+                price: 320,
+                description: "Высокопрочная полиамидная нить.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Канат джутовый крученый 3,0 мм (30 м)",
+                price: 450,
+                description: "Натуральный джут, декоративный вид.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Саморезы кровельные 4.8х50 металл-дерево",
+                price: 3.50,
+                description: "Оцинкованные с шайбой EPDM.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Кровельный саморез RAL 3005 (Вишня) 29 мм",
+                price: 4.20,
+                description: "Окрашенный в цвет RAL 3005.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Кровельный саморез RAL 7024 (Графит) 70 мм",
+                price: 6.50,
+                description: "Популярный серый цвет для современной кровли.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Кровельный саморез RAL 8017 (Шоколад) 35 мм",
+                price: 4.50,
+                description: "Коричневый цвет, стойкая краска.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Стяжка Н швеллер Бабочка Hoffmanna (Белый)",
+                price: 15,
+                description: "Для соединения мебельных щитов.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Шкант мебельный 6х30 мм",
+                price: 1.5,
+                description: "Деревянный, береза.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Стяжка межсекционная никелированная 8*30 мм",
+                price: 12,
+                description: "Соединение шкафов, покрытие никель.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Анкер клиновой М10 х 95 мм",
+                category: "anchors",
+                price: 45,
+                description: "Для бетона и камня, высокая нагрузка.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Анкер латунный М8x28",
+                price: 22,
+                description: "Цанга латунная, коррозионностойкая.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Заклепка вытяжная 3.2x8 алюминий/сталь",
+                price: 0.9,
+                description: "Комбинированная, стандартный бортик.",
+                inStock: true,
+            },
+            {
+                id: uuid(),
+                name: "Заклепка вытяжная 4.8x12 алюминий/сталь",
+                price: 1.5,
+                description: "Увеличенный диаметр для прочности.",
+                inStock: true,
+            }
+        ];
+
+        const Icon = ({ name, size = 24, className = "" }) => {
+            const [iconSvg, setIconSvg] = useState('');
+
+            useEffect(() => {
+                if (window.lucide && window.lucide.icons && window.lucide.icons[name]) {
+                    const iconData = window.lucide.icons[name];
+                    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}">${iconData.map(([tag, attrs]) => {
+                        const attrsStr = Object.entries(attrs || {}).map(([k, v]) => `${k}="${v}"`).join(' ');
+                        return `<${tag} ${attrsStr} />`;
+                    }).join('')}</svg>`;
+                    setIconSvg(svg);
+                }
+            }, [name, size, className]);
+
+            return <span dangerouslySetInnerHTML={{ __html: iconSvg }} />;
+        };
+
+        const Header = ({ cartCount, onCartClick, searchTerm, onSearchChange, user, onLoginClick, onLogoutClick, toggleMobileMenu }) => {
+            return (
+                <header className="bg-white shadow-md sticky top-0 z-50">
+                    <div className="bg-primary-900 text-primary-50 text-xs py-2 px-4">
+                        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+                            <div className="flex items-center gap-4">
+                                <span className="flex items-center gap-1">
+                                    <Icon name="Phone" size={14} />
+                                    {COMPANY_INFO.phone}
+                                </span>
+                                <span className="hidden sm:flex items-center gap-1">
+                                    <Icon name="MapPin" size={14} />
+                                    {COMPANY_INFO.address}
+                                </span>
+                            </div>
+                            
+                            {user ? (
+                                <div className="flex items-center gap-4">
+                                    <span className="flex items-center gap-1 text-secondary-500 font-bold">
+                                        <Icon name="Lock" size={14} />
+                                        {user.name} ({user.role})
+                                    </span>
+                                    <button onClick={onLogoutClick} className="flex items-center gap-1 hover:text-white text-primary-200 transition-colors">
+                                        <Icon name="LogOut" size={14} /> Выйти
+                                    </button>
+                                </div>
+                            ) : (
+                                <button onClick={onLoginClick} className="flex items-center gap-1 hover:text-white transition-colors text-primary-200">
+                                    <Icon name="User" size={14} />
+                                    Вход для сотрудников
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto px-4 py-4">
+                        <div className="flex items-center justify-between gap-4">
+                            <button onClick={toggleMobileMenu} className="lg:hidden text-gray-600">
+                                <Icon name="Menu" size={28} />
+                            </button>
+
+                            <div className="flex-shrink-0">
+                                <h1 className="text-3xl font-black text-primary-700 tracking-tighter cursor-pointer">
+                                    {COMPANY_INFO.logoText}
+                                    <span className="text-secondary-500">.</span>
+                                </h1>
+                            </div>
+
+                            <div className="hidden sm:flex flex-1 max-w-2xl mx-4">
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Поиск товаров (например: саморез, анкер)..."
+                                        className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 transition-colors"
+                                        value={searchTerm}
+                                        onChange={(e) => onSearchChange(e.target.value)}
+                                    />
+                                    <span className="absolute left-3 top-3 text-gray-400">
+                                        <Icon name="Search" size={20} />
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                <button className="relative p-2 hover:bg-gray-100 rounded-full transition-colors group" onClick={onCartClick}>
+                                    <span className="text-gray-700 group-hover:text-primary-600">
+                                        <Icon name="ShoppingCart" size={28} />
+                                    </span>
+                                    {cartCount > 0 && (
+                                        <span className="absolute -top-1 -right-1 bg-secondary-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full animate-bounce">
+                                            {cartCount}
+                                        </span>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="mt-3 sm:hidden">
+                            <div className="relative w-full">
+                                <input
+                                    type="text"
+                                    placeholder="Поиск..."
+                                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg"
+                                    value={searchTerm}
+                                    onChange={(e) => onSearchChange(e.target.value)}
+                                />
+                                <span className="absolute left-3 top-2.5 text-gray-400">
+                                    <Icon name="Search" size={18} />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            );
+        };
+
+        const Footer = () => {
+            return (
+                <footer className="bg-gray-800 text-gray-300 py-10 mt-auto">
+                    <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div>
+                            <h3 className="text-white text-2xl font-bold mb-4">{COMPANY_INFO.logoText}</h3>
+                            <p className="text-sm leading-relaxed">
+                                Ваш надежный партнер в строительстве и ремонте. 
+                                Широкий ассортимент крепежа, инструмента и расходных материалов.
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 className="text-white font-semibold mb-4">Контакты</h4>
+                            <p className="mb-2">Телефон: <span className="text-white">{COMPANY_INFO.phone}</span></p>
+                            <p>Адрес: {COMPANY_INFO.address}</p>
+                        </div>
+
+                        <div>
+                            <h4 className="text-white font-semibold mb-4">Информация</h4>
+                            <ul className="space-y-2 text-sm">
+                                <li><a href="#" className="hover:text-white">О компании</a></li>
+                                <li><a href="#" className="hover:text-white">Доставка и оплата</a></li>
+                                <li><a href="#" className="hover:text-white">Возврат товара</a></li>
+                                <li><a href="#" className="hover:text-white">Политика конфиденциальности</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-gray-700 text-center text-xs text-gray-500">
+                        &copy; {new Date().getFullYear()} {COMPANY_INFO.name}. Все права защищены.
+                    </div>
+                </footer>
+            );
+        };
+
+        const CartDrawer = ({ isOpen, onClose, items, onUpdateQuantity, onRemoveItem, onClearCart }) => {
+            const total = useMemo(() => {
+                return items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            }, [items]);
+
+            const handleCheckout = () => {
+                if (items.length === 0) return;
+
+                const orderText = items.map(i => `- ${i.name} x${i.quantity} (${(i.price * i.quantity).toFixed(2)}₽)`).join('\n');
+                const message = `🔔 НОВЫЙ ЗАКАЗ 🔔\nОт клиента сайта Alliance\n\nСостав заказа:\n${orderText}\n\nИтого: ${total.toFixed(2)}₽\n\nКонтакты магазина: ${COMPANY_INFO.phone}`;
+
+                console.log("SENDING TO TELEGRAM API:", message);
+                
+                alert(`Заказ оформлен! Владельцу (${COMPANY_INFO.phone}) отправлено уведомление в Telegram.`);
+                onClearCart();
+                onClose();
+            };
+
+            if (!isOpen) return null;
+
+            return (
+                <div className="fixed inset-0 z-[100] flex justify-end">
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+                    
+                    <div className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-slideInRight">
+                        <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+                            <h2 className="text-xl font-bold text-gray-800">Корзина</h2>
+                            <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full">
+                                <Icon name="X" size={24} />
+                            </button>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                            {items.length === 0 ? (
+                                <div className="text-center text-gray-500 mt-20">
+                                    <p className="text-lg">Корзина пуста</p>
+                                    <p className="text-sm">Добавьте товары из каталога</p>
+                                </div>
+                            ) : (
+                                items.map(item => (
+                                    <div key={item.id} className="flex gap-3 bg-white border border-gray-100 p-3 rounded-lg shadow-sm">
+                                        <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded bg-gray-100" />
+                                        <div className="flex-1">
+                                            <h4 className="text-sm font-medium text-gray-900 line-clamp-2">{item.name}</h4>
+                                            <p className="text-xs text-gray-500 mb-2">{item.category}</p>
+                                            <div className="flex justify-between items-center">
+                                                <span className="font-bold text-primary-700">{item.price} ₽</span>
+                                                
+                                                <div className="flex items-center gap-2">
+                                                    <button 
+                                                        onClick={() => onUpdateQuantity(item.id, -1)}
+                                                        className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                                                        disabled={item.quantity <= 1}
+                                                    >
+                                                        -
+                                                    </button>
+                                                    <span className="text-sm w-4 text-center">{item.quantity}</span>
+                                                    <button 
+                                                        onClick={() => onUpdateQuantity(item.id, 1)}
+                                                        className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                                                    >
+                                                        +
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => onRemoveItem(item.id)}
+                                                        className="ml-2 text-red-500 hover:text-red-700"
+                                                    >
+                                                        <Icon name="Trash2" size={16} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        {items.length > 0 && (
+                            <div className="p-4 border-t bg-gray-50">
+                                <div className="flex justify-between items-center mb-4">
+                                    <span className="text-gray-600">Итого:</span>
+                                    <span className="text-2xl font-bold text-gray-900">{total.toFixed(2)} ₽</span>
+                                </div>
+                                <button 
+                                    onClick={handleCheckout}
+                                    className="w-full bg-secondary-500 hover:bg-secondary-600 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                                >
+                                    <Icon name="Send" size={18} />
+                                    Оформить заказ
+                                </button>
+                                <p className="text-xs text-center text-gray-400 mt-2">
+                                    Менеджер свяжется с вами для уточнения деталей.
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const ProductDetails = ({ product, onClose, onAddToCart }) => {
+            if (!product) return null;
+
+            return (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+                    
+                    <div className="relative bg-white w-full max-w-4xl rounded-xl shadow-2xl overflow-hidden animate-fadeIn">
+                        <button onClick={onClose} className="absolute top-4 right-4 p-2 bg-white/80 rounded-full hover:bg-gray-100 z-10">
+                            <Icon name="X" size={24} />
+                        </button>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2">
+                            <div className="h-64 md:h-auto bg-gray-100 flex items-center justify-center">
+                                <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                            </div>
+
+                            <div className="p-8 flex flex-col">
+                                <div className="mb-auto">
+                                    <span className="inline-block bg-primary-100 text-primary-800 text-xs px-2 py-1 rounded-full mb-2 uppercase font-semibold">
+                                        {product.category}
+                                    </span>
+                                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{product.name}</h2>
+                                    <p className="text-gray-600 mb-6 leading-relaxed">
+                                        {product.description || "Описание отсутствует."}
+                                    </p>
+                                    
+                                    <div className="space-y-2 mb-6">
+                                        <div className="flex items-center text-sm text-green-600 gap-2">
+                                            <Icon name="Check" size={16} />
+                                            <span>В наличии на складе</span>
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                            Артикул: {product.id.substring(0,6).toUpperCase()}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between border-t pt-6 mt-6">
+                                    <div>
+                                        <span className="text-sm text-gray-500 block">Цена за шт.</span>
+                                        <span className="text-3xl font-bold text-primary-700">{product.price} ₽</span>
+                                    </div>
+                                    <button 
+                                        onClick={() => {
+                                            onAddToCart(product);
+                                            onClose();
+                                        }}
+                                        className="bg-secondary-500 hover:bg-secondary-600 text-white px-8 py-3 rounded-lg font-bold shadow-lg shadow-orange-500/20 transition-all hover:-translate-y-0.5"
+                                    >
+                                        В корзину
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const LoginModal = ({ onClose, onLoginSuccess }) => {
+            const [login, setLogin] = useState('');
+            const [password, setPassword] = useState('');
+            const [error, setError] = useState('');
+            const [loading, setLoading] = useState(false);
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setError('');
+                setLoading(true);
+
+                try {
+                    const response = await fetch(`${API_URL}/auth/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ login, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        setError(data.error === 'Invalid credentials' ? 'Неверный логин или пароль' : data.error);
+                    } else {
+                        onLoginSuccess(data.user, data.token);
+                        onClose();
+                    }
+                } catch (err) {
+                    console.error('Login error:', err);
+                    setError('Ошибка подключения к серверу. Убедитесь, что бэкенд запущен на порту 3000');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="fixed inset-0 z-[70] flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+                    
+                    <div className="relative bg-white w-full max-w-md rounded-xl shadow-2xl p-8 animate-fadeIn">
+                        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                            <Icon name="X" size={24} />
+                        </button>
+
+                        <div className="flex flex-col items-center mb-6">
+                            <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4">
+                                <span className="text-primary-600">
+                                    <Icon name="Lock" size={24} />
+                                </span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-800">Вход в систему</h2>
+                            <p className="text-gray-500 text-sm">Панель администратора Alliance</p>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            {error && (
+                                <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg flex items-center gap-2">
+                                    <Icon name="AlertCircle" size={16} />
+                                    {error}
+                                </div>
+                            )}
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Логин</label>
+                                <input 
+                                    type="text" 
+                                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
+                                    value={login}
+                                    onChange={e => setLogin(e.target.value)}
+                                    placeholder="Введите логин"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Пароль</label>
+                                <input 
+                                    type="password" 
+                                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    placeholder="Введите пароль"
+                                />
+                            </div>
+
+                            <button 
+                                type="submit" 
+                                disabled={loading}
+                                className="w-full bg-primary-600 text-white font-bold py-3 rounded-lg hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {loading ? 'Вход...' : 'Войти'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        const AdminPanel = ({ products, onAddProduct, onUpdateProduct, onDeleteProduct }) => {
+            const [isEditing, setIsEditing] = useState(null);
+            
+            const [formData, setFormData] = useState({
+                name: '',
+                category: 'fasteners',
+                price: 0,
+                description: '',
+                image: 'https://picsum.photos/300/300?random=99'
+            });
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if(!formData.name || !formData.price) return;
+
+                const newProduct = {
+                    id: isEditing || Math.random().toString(36).substr(2, 9),
+                    name: formData.name,
+                    category: formData.category || 'fasteners',
+                    price: Number(formData.price),
+                    description: formData.description || '',
+                    inStock: true,
+                    image: formData.image || 'https://picsum.photos/300/300?random=100'
+                };
+
+                if (isEditing) {
+                    onUpdateProduct(newProduct);
+                } else {
+                    onAddProduct(newProduct);
+                }
+
+                setIsEditing(null);
+                setFormData({
+                    name: '',
+                    category: 'fasteners',
+                    price: 0,
+                    description: '',
+                    image: 'https://picsum.photos/300/300?random=101'
+                });
+            };
+
+            const startEdit = (p) => {
+                setIsEditing(p.id);
+                setFormData(p);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            return (
+                <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8">
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                            🛠️ Панель управления товарами
+                        </h2>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="bg-gray-50 p-6 rounded-lg mb-8 border border-gray-200">
+                        <h3 className="font-semibold text-lg mb-4 text-gray-700">
+                            {isEditing ? 'Редактировать товар' : 'Добавить новый товар'}
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Название</label>
+                                <input 
+                                    required
+                                    type="text" 
+                                    className="w-full border rounded p-2"
+                                    value={formData.name || ''}
+                                    onChange={e => setFormData({...formData, name: e.target.value})}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Категория</label>
+                                <select 
+                                    className="w-full border rounded p-2"
+                                    value={formData.category}
+                                    onChange={e => setFormData({...formData, category: e.target.value})}
+                                >
+                                    {CATEGORIES.filter(c => c.slug !== 'all').map(c => (
+                                        <option key={c.id} value={c.slug}>{c.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Цена (₽)</label>
+                                <input 
+                                    required
+                                    type="number" 
+                                    step="0.01"
+                                    className="w-full border rounded p-2"
+                                    value={formData.price || ''}
+                                    onChange={e => setFormData({...formData, price: parseFloat(e.target.value)})}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Ссылка на фото</label>
+                                <input 
+                                    type="text" 
+                                    className="w-full border rounded p-2 text-xs text-gray-500"
+                                    value={formData.image || ''}
+                                    onChange={e => setFormData({...formData, image: e.target.value})}
+                                />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Описание</label>
+                                <textarea 
+                                    className="w-full border rounded p-2 h-20"
+                                    value={formData.description || ''}
+                                    onChange={e => setFormData({...formData, description: e.target.value})}
+                                />
+                            </div>
+                        </div>
+                        <div className="mt-4 flex gap-2">
+                            <button type="submit" className="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700 flex items-center gap-2">
+                                <Icon name="Save" size={18} />
+                                {isEditing ? 'Сохранить изменения' : 'Создать товар'}
+                            </button>
+                            {isEditing && (
+                                <button 
+                                    type="button" 
+                                    onClick={() => { setIsEditing(null); setFormData({name:'', price:0, category: 'fasteners'}); }}
+                                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                                >
+                                    Отмена
+                                </button>
+                            )}
+                        </div>
+                    </form>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3">Фото</th>
+                                    <th className="px-6 py-3">Название</th>
+                                    <th className="px-6 py-3">Категория</th>
+                                    <th className="px-6 py-3">Цена</th>
+                                    <th className="px-6 py-3">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {products.map(product => (
+                                    <tr key={product.id} className="bg-white border-b hover:bg-gray-50">
+                                        <td className="px-6 py-4">
+                                            <img src={product.image} className="w-10 h-10 rounded object-cover" />
+                                        </td>
+                                        <td className="px-6 py-4 font-medium text-gray-900">{product.name}</td>
+                                        <td className="px-6 py-4">{product.category}</td>
+                                        <td className="px-6 py-4">{product.price} ₽</td>
+                                        <td className="px-6 py-4 flex gap-2">
+                                            <button 
+                                                onClick={() => startEdit(product)}
+                                                className="font-medium text-blue-600 hover:underline"
+                                            >
+                                                Ред.
+                                            </button>
+                                            <button 
+                                                onClick={() => { if(confirm('Удалить товар?')) onDeleteProduct(product.id); }}
+                                                className="font-medium text-red-600 hover:underline"
+                                            >
+                                                Удалить
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        };
+
+        const API_URL = 'http://localhost:3000/api';
+
+        function App() {
+            const [products, setProducts] = useState([]);
+            const [cart, setCart] = useState([]);
+            const [selectedCategory, setSelectedCategory] = useState('all');
+            const [searchTerm, setSearchTerm] = useState('');
+            const [isCartOpen, setIsCartOpen] = useState(false);
+            const [selectedProduct, setSelectedProduct] = useState(null);
+            
+            const [user, setUser] = useState(null);
+            const [token, setToken] = useState(localStorage.getItem('token'));
+            const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+            
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+            useEffect(() => {
+                fetch(`${API_URL}/products`)
+                    .then(res => res.json())
+                    .then(data => setProducts(data))
+                    .catch(err => {
+                        console.error('Failed to load products:', err);
+                        setProducts(INITIAL_PRODUCTS);
+                    });
+            }, []);
+
+            useEffect(() => {
+                if (token) {
+                    fetch(`${API_URL}/auth/me`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.error) {
+                            setUser(data);
+                        } else {
+                            localStorage.removeItem('token');
+                            setToken(null);
+                        }
+                    })
+                    .catch(err => console.error('Auth check failed:', err));
+                }
+            }, [token]);
+
+            const addToCart = (product) => {
+                setCart(prev => {
+                    const existing = prev.find(item => item.id === product.id);
+                    if (existing) {
+                        return prev.map(item => 
+                            item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+                        );
+                    }
+                    return [...prev, { ...product, quantity: 1 }];
+                });
+            };
+
+            const updateCartQuantity = (id, delta) => {
+                setCart(prev => prev.map(item => {
+                    if (item.id === id) {
+                        return { ...item, quantity: Math.max(1, item.quantity + delta) };
+                    }
+                    return item;
+                }));
+            };
+
+            const removeFromCart = (id) => {
+                setCart(prev => prev.filter(item => item.id !== id));
+            };
+
+            const handleAddProduct = async (p) => {
+                try {
+                    const response = await fetch(`${API_URL}/products`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(p)
+                    });
+                    const newProduct = await response.json();
+                    if (!newProduct.error) {
+                        setProducts([newProduct, ...products]);
+                    }
+                } catch (err) {
+                    console.error('Failed to add product:', err);
+                    alert('Ошибка при добавлении товара');
+                }
+            };
+
+            const handleUpdateProduct = async (p) => {
+                try {
+                    const response = await fetch(`${API_URL}/products/${p.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(p)
+                    });
+                    const updated = await response.json();
+                    if (!updated.error) {
+                        setProducts(prev => prev.map(x => x.id === p.id ? updated : x));
+                    }
+                } catch (err) {
+                    console.error('Failed to update product:', err);
+                    alert('Ошибка при обновлении товара');
+                }
+            };
+
+            const handleDeleteProduct = async (id) => {
+                try {
+                    await fetch(`${API_URL}/products/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    setProducts(prev => prev.filter(x => x.id !== id));
+                } catch (err) {
+                    console.error('Failed to delete product:', err);
+                    alert('Ошибка при удалении товара');
+                }
+            };
+
+            const handleLoginSuccess = (loggedInUser, authToken) => {
+                setUser(loggedInUser);
+                setToken(authToken);
+                localStorage.setItem('token', authToken);
+            };
+
+            const handleLogout = async () => {
+                try {
+                    await fetch(`${API_URL}/auth/logout`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                } catch (err) {
+                    console.error('Logout error:', err);
+                }
+                setUser(null);
+                setToken(null);
+                localStorage.removeItem('token');
+            };
+
+            const filteredProducts = useMemo(() => {
+                return products.filter(product => {
+                    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+                    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+                    return matchesCategory && matchesSearch;
+                });
+            }, [products, selectedCategory, searchTerm]);
+
+            const cartItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+            return (
+                <div className="min-h-screen flex flex-col bg-gray-50">
+                    <Header 
+                        cartCount={cartItemCount}
+                        onCartClick={() => setIsCartOpen(true)}
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        user={user}
+                        onLoginClick={() => setIsLoginModalOpen(true)}
+                        onLogoutClick={handleLogout}
+                        toggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    />
+
+                    <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+                        
+                        {user?.role === 'admin' ? (
+                            <AdminPanel 
+                                products={products}
+                                onAddProduct={handleAddProduct}
+                                onUpdateProduct={handleUpdateProduct}
+                                onDeleteProduct={handleDeleteProduct}
+                            />
+                        ) : (
+                            <div className="flex flex-col lg:flex-row gap-8">
+                                <aside className={`lg:w-64 flex-shrink-0 space-y-8 ${isMobileMenuOpen ? 'block' : 'hidden lg:block'}`}>
+                                    
+                                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                                        <div className="bg-gray-100 px-4 py-3 border-b border-gray-200">
+                                            <h3 className="font-bold text-gray-700 flex items-center gap-2">
+                                                <Icon name="Filter" size={18} /> Категории
+                                            </h3>
+                                        </div>
+                                        <ul className="divide-y divide-gray-100">
+                                            {CATEGORIES.map(category => (
+                                                <li key={category.id}>
+                                                    <button
+                                                        onClick={() => { setSelectedCategory(category.slug); setIsMobileMenuOpen(false); }}
+                                                        className={`w-full text-left px-4 py-3 text-sm transition-colors flex justify-between items-center group
+                                                            ${selectedCategory === category.slug 
+                                                                ? 'bg-primary-50 text-primary-700 font-semibold border-l-4 border-primary-500' 
+                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                                            }`}
+                                                    >
+                                                        {category.name}
+                                                        {selectedCategory === category.slug && <Icon name="ChevronRight" size={16} />}
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    <div className="bg-primary-600 rounded-lg shadow-lg p-6 text-white text-center hidden lg:block">
+                                        <h4 className="font-bold text-lg mb-2">Нужна консультация?</h4>
+                                        <p className="text-sm text-primary-100 mb-4">Наши специалисты помогут подобрать правильный крепеж.</p>
+                                        <button className="bg-white text-primary-600 px-4 py-2 rounded font-bold text-sm w-full hover:bg-primary-50 transition">
+                                            Заказать звонок
+                                        </button>
+                                    </div>
+
+                                </aside>
+
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-end mb-6">
+                                        <h2 className="text-2xl font-bold text-gray-800">
+                                            {CATEGORIES.find(c => c.slug === selectedCategory)?.name || 'Каталог'}
+                                            <span className="ml-3 text-sm font-normal text-gray-500">
+                                                Найдено товаров: {filteredProducts.length}
+                                            </span>
+                                        </h2>
+                                    </div>
+
+                                    {filteredProducts.length > 0 ? (
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                            {filteredProducts.map(product => (
+                                                <div 
+                                                    key={product.id} 
+                                                    className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group"
+                                                >
+                                                    <div 
+                                                        className="relative h-48 bg-gray-100 rounded-t-lg overflow-hidden cursor-pointer"
+                                                        onClick={() => setSelectedProduct(product)}
+                                                    >
+                                                        <img 
+                                                            src={product.image} 
+                                                            alt={product.name} 
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                                        />
+                                                        <button className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <Icon name="Info" size={18} />
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    <div className="p-4 flex flex-col flex-1">
+                                                        <div className="text-xs text-gray-500 mb-1">{product.category}</div>
+                                                        <h3 
+                                                            className="text-gray-800 font-medium leading-snug mb-2 line-clamp-2 cursor-pointer hover:text-primary-600"
+                                                            onClick={() => setSelectedProduct(product)}
+                                                        >
+                                                            {product.name}
+                                                        </h3>
+                                                        
+                                                        <div className="mt-auto pt-4 flex items-center justify-between">
+                                                            <div className="flex flex-col">
+                                                                <span className="text-xl font-bold text-gray-900">{product.price} ₽</span>
+                                                                <span className="text-[10px] text-gray-400">за шт.</span>
+                                                            </div>
+                                                            <button 
+                                                                onClick={() => addToCart(product)}
+                                                                className="bg-primary-600 hover:bg-primary-700 text-white p-2 rounded-lg transition-colors shadow-sm active:scale-95"
+                                                                title="В корзину"
+                                                            >
+                                                                <Icon name="ShoppingCart" size={20} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="bg-white p-12 rounded-lg shadow-sm text-center">
+                                            <div className="text-gray-400 mb-4">
+                                                <Icon name="Search" size={48} className="mx-auto" />
+                                            </div>
+                                            <h3 className="text-lg font-medium text-gray-900">Ничего не найдено</h3>
+                                            <p className="text-gray-500 mt-2">Попробуйте изменить параметры поиска или категорию.</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </main>
+
+                    <Footer />
+                    
+                    <CartDrawer 
+                        isOpen={isCartOpen}
+                        onClose={() => setIsCartOpen(false)}
+                        items={cart}
+                        onUpdateQuantity={updateCartQuantity}
+                        onRemoveItem={removeFromCart}
+                        onClearCart={() => setCart([])}
+                    />
+
+                    <ProductDetails 
+                        product={selectedProduct}
+                        onClose={() => setSelectedProduct(null)}
+                        onAddToCart={addToCart}
+                    />
+
+                    {isLoginModalOpen && (
+                        <LoginModal 
+                            onClose={() => setIsLoginModalOpen(false)}
+                            onLoginSuccess={handleLoginSuccess}
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

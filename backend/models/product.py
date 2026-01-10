@@ -16,7 +16,7 @@ class Product(Base):
     category_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("categories.id"), nullable=True)
     pack_quantity: Mapped[int | None] = mapped_column(Integer, nullable=True)
     quantity: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    price: Mapped[float | None] = mapped_column(Numeric(10, 2), nullable=True)
+    price: Mapped[float | None] = mapped_column(Numeric(10, 2), nullable=False)
     weight: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
     color_id: Mapped[int | None] = mapped_column(ForeignKey("colors.id"), nullable=True)
