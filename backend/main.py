@@ -9,6 +9,8 @@ from routes import materials_router
 from routes import products_router
 from routes import site_content_router
 
+from fastapi.staticfiles import StaticFiles
+
 # Запуск - uvicorn main:app --reload
 app = FastAPI(
     title=settings.app_name,
@@ -36,6 +38,8 @@ app.include_router(site_content_router)
 @app.get("/")
 async def root():
     return {"message": f"Welcome to {settings.app_name} API"}
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Подключаем админку
 from admin import admin

@@ -1,0 +1,13 @@
+  try {
+    const res = await fetch(`${API_BASE_URL}/site-content/`);
+    if (!res.ok) return;
+
+    const data = (await res.json()) as SiteContentItem[];
+    const map = new Map<string, string>(data.map((x) => [x.key, x.value]));
+
+    phone.value = map.get('Телефон') ?? phone.value;
+    address.value = map.get('Адрес') ?? address.value;
+  } catch {
+    return;
+  }
+}

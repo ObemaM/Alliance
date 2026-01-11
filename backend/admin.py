@@ -1,8 +1,11 @@
 from sqladmin import Admin, ModelView
 from pathlib import Path
+from wtforms import StringField, FileField
 from sqlalchemy import func, select
-from wtforms import StringField
 from wtforms.validators import Optional
+import uuid
+import shutil
+import re
 
 from database import engine
 from models import Product, Country, Color, Category, Material, SiteContent, ProductImage, OrderItem, ProductAttribute, Order, Attribute 
@@ -12,6 +15,13 @@ from main import app
 
 # Создаем админку
 admin = Admin(app, engine, templates_dir=str(Path(__file__).resolve().parent / "templates"), title="Панель администратора")
+
+# Очищение названия файла от недопустимых символов
+def sanitize_filename(name: str) -> str:
+    if not name:
+        return "file"
+    name = name.replace("\\", "/").split("/")[-1]
+    return re.sub(r"[^A-Za-z0-9._-]", "_", name)
 
 # Настройка для товаров
 class ProductAdmin(ModelView, model=Product):
@@ -103,11 +113,41 @@ class SiteContentAdmin(ModelView, model=SiteContent):
     name = "Контент сайта"
     name_plural = "Контент сайта"
     column_list = [SiteContent.key, SiteContent.value, SiteContent.description]
+    form_columns = [SiteContent.key, SiteContent.value, SiteContent.description]
     column_labels = {
         SiteContent.key: "Ключ",
         SiteContent.value: "Значение",
         SiteContent.description: "Описание"
     }
+
+    async def scaffold_form(self, rules=None):
+        form = await super().scaffold_form(rules)
+        form.file_upload = FileField("Загрузить файл")
+        return form
+
+    async def on_model_change(self, data, model, is_created, request):
+        upload = data.pop("file_upload", None)
+        if upload and getattr(upload, "filename", ""):
+            filename = sanitize_filename(upload.filename)
+            ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+            if ext not in ["jpg", "jpeg", "png"]:
+                raise ValueError("Разрешены только jpg/jpeg/png")
+
+            new_name = f"logo-{uuid.uuid4().hex}.{ext}"
+            upload_dir = Path("uploads/images")
+            upload_dir.mkdir(parents=True, exist_ok=True)
+            file_path = upload_dir / new_name
+
+            upload.file.seek(0)
+            with file_path.open("wb") as buffer:
+                shutil.copyfileobj(upload.file, buffer)
+
+            new_value = f"/uploads/images/{new_name}"
+            data["value"] = new_value
+            model.value = new_value
+
+        await super().on_model_change(data, model, is_created, request)
+
 
 # Настройка для простых моделей
 class CountryAdmin(ModelView, model=Country):
