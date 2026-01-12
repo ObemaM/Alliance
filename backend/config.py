@@ -23,10 +23,8 @@ class Settings(BaseSettings):
 
     IMAGES: str = "uploads/images"
 
-    # Максимальный размер файла (5 МБ), чтобы сервер не положили
-    MAX_SIZE: int = 5 
-
-    # Разрешенные форматы
-    ALLOWED_EXTENSIONS: list = ["jpg", "jpeg", "png", "webp"]
+    ALLOWED_EXTENSIONS: list = ["jpg", "jpeg", "png", "mp4"]
+    
+    MAX_SIZE: int = 5 * 1024 * 1024
 
 settings = Settings()

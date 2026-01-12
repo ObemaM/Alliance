@@ -19,3 +19,6 @@ class Category(Base):
     parent: Mapped["Category"] = relationship("Category", remote_side=[id])
     # Это надо для рекурсии - для нахождения всех записей в дереве
     children: Mapped[List["Category"]] = relationship("Category", back_populates="parent")
+
+    def __str__(self) -> str:
+        return self.name

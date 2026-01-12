@@ -9,5 +9,8 @@ class Color(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False)
     code: Mapped[str | None] = mapped_column(String(10), nullable=True)
 
+    def __str__(self) -> str:
+        return self.name
+
     def __repr__(self):
         return f"Color(id={self.id}, name={self.name}, code={self.code})"
