@@ -8,16 +8,3 @@ class CategoryResponse(BaseModel):
     
     class Config:
         from_attributes = True  # Позволяет создавать схему из ORM-модели
-
-# Создание
-class CategoryCreate(BaseModel):
-    name: str
-    slug: str
-    parent_id: int | None = None
-
-
-# Редактирование - в update все поля не обязательны
-class CategoryUpdate(BaseModel):
-    name: str | None = None
-    slug: str | None = None
-    parent_id: int | None = None

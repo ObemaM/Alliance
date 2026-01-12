@@ -11,9 +11,6 @@ class Country(Base):
     
     # name - строка до 100 символов (varchar(100))
     name: Mapped[str] = mapped_column(String(100), nullable=False)
-
-    def __str__(self) -> str:
-        return self.name
     
     def __repr__(self):
         return f"Country(id={self.id}, name={self.name})"
