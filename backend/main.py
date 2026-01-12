@@ -11,6 +11,8 @@ from routes import site_content_router
 
 from fastapi.staticfiles import StaticFiles
 
+# ./venv/Scripts/activate
+
 # Запуск - uvicorn main:app --reload
 app = FastAPI(
     title=settings.app_name,

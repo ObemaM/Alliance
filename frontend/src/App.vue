@@ -9,16 +9,33 @@
 
     <div class = "header">
       <div class="header__container">
-        <img v-if="logo" :src="logo" alt="Логотип" class="header__logo" />
-        <div v-else class="header__logo"> - </div>
-        <h1>ALLIANCE.</h1>
+        <div class="header__name">
+          <img v-if="logo" :src="logo" alt="Логотип" class="header__logo" />
+          <div v-else class="header__logo"> - </div>
+          <h1>ALLIANCE</h1>
+        </div>
+        <SearchInput 
+          v-model="searchTerm"
+          placeholder="Поиск товаров..."
+          class="header__search"
+        />
+
+        <button class="header__cart" @click="handleCartClick">
+          <Icon name="ShoppingCart" :size="25" />
+        </button>
       </div>
+    </div>
+
+    <div class="content">
+      <router-view />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import Icon from './components/Icon.vue';
+import SearchInput from './components/SearchInput.vue';
 
 type SiteContentItem = {
   id: number;
@@ -32,7 +49,13 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000
 // Реактивные переменные, нужны для обновления данных при загрузке
 const phone = ref('Номер телефона недоступен');
 const address = ref('Адрес недоступен');
-const logo = ref(' ')
+const logo = ref(' ');
+const searchTerm = ref('');
+
+const handleCartClick = () => {
+  console.log('Корзина открыта');
+  // Здесь будет логика открытия корзины
+};
 
 async function loadSiteContent() {
   try{
@@ -62,8 +85,8 @@ onMounted(loadSiteContent);
 
 <style>
   :root {
-    --topbar-height: 32px;
-    --header-height: 72px;
+    --topbar-height: 30px;
+    --header-height: 70px;
   }
   
   .page {
@@ -74,7 +97,7 @@ onMounted(loadSiteContent);
   }
 
   .topbar{
-    font-size: 13px;
+    font-size: 15px;
     position: sticky;
     top: 0;
     min-height: var(--topbar-height);
@@ -86,7 +109,7 @@ onMounted(loadSiteContent);
   }
 
   .topbar__container {
-    font-family: 'Futura', monospace;
+    font-family: Calibri, sans-serif;
     display: flex;
     justify-content: space-between;
     
@@ -122,45 +145,73 @@ onMounted(loadSiteContent);
     z-index: 10;
   }
  
-  .header__container {
+  .header__name {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 16px;
-    width: 100%;
-    gap: 2px;
   }
  
   .header__logo{
     /* Чтобы лого спокойно вписывалось в нужные размеры */
-    display: block; 
+    display: flex; 
     margin-top: 2px;
     width: 50px;
     height: 50px;
     object-fit: contain;
   }
 
+  .header__cart{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: black;
+  }
+
+  .header__cart:hover {
+    background-color: #f5f6f7;
+    color: #eaae52;
+  }
+
+  .header__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+    width: 100%;
+    gap: 2px;
+  }
+
   h1 {
     text-align: left;
     font-size: 22px;
-    font-style: italic;
     font-weight: 500;
     color: black;
     letter-spacing: -0.02em;
     -webkit-text-stroke: 0.3px black;
     margin: 0;
   }
+
+  .header__search {
+    background-color: #f5f6f7;
+    border-radius: 1px;
+
+  }
   
   @media (max-width: 740px) {
     :root{
       --topbar-height: 30px;
-      --header-height: 55px;
+      --header-height: 70px;
     }
     
     .topbar {
-      font-size: 13px;
+      font-size: 15px;
       min-height: var(--topbar-height);
     }
 
@@ -173,10 +224,8 @@ onMounted(loadSiteContent);
     }
 
     .topbar__address {
+      /* Убрано из отображения */
       display: none;
-      text-align: center;
-      flex-basis: 100%;
-      margin-top: -12px;
     }
 
     .header{
