@@ -25,6 +25,6 @@ class Settings(BaseSettings):
 
     ALLOWED_EXTENSIONS: list = ["jpg", "jpeg", "png", "mp4"]
     
-    MAX_SIZE: int = 5 * 1024 * 1024
+    MAX_SIZE: int = 3 * 1024 * 1024
 
 settings = Settings()

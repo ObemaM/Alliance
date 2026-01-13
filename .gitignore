@@ -31,6 +31,14 @@ node_modules/
 dist/
 *.local
 
+# Vue.js specific
+coverage/
+*.tsbuildinfo
+
 # Logs
 *.log
 logs/
+
+# Build artifacts
+build/
+.output/
