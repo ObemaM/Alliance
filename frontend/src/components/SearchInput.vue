@@ -14,11 +14,13 @@
 <script setup lang="ts">
 import Icon from './Icon.vue'
 
+// Определение входных параметров
 interface Props {
-  modelValue: string
-  placeholder?: string
+  modelValue: string // Текущее значение
+  placeholder?: string // Что написано в поисковой строке
 }
 
+// Макрос - это код, который обрабатывается до выполнения программы и заменяется на другой код.
 const props = withDefaults(defineProps<Props>(), {
   placeholder: 'Поиск товаров...'
 })

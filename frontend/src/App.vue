@@ -27,7 +27,24 @@
     </div>
 
     <div class="content">
+      <!-- Показывает роуты в зависимости от страницы -->
       <router-view />
+    </div>
+
+    <div class="bottom">
+      <div class="bottom__container">
+        <h2>ALLIANCE</h2>
+        <h3>Контакты</h3>
+        <h4>Информация</h4>
+      </div>
+      <div class="bottom__info">
+        <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте. Широкий ассортимент крепежа, инструмента и расходных материалов.</p>
+        <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте. Широкий ассортимент крепежа, инструмента и расходных материалов.</p>
+        <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте. Широкий ассортимент крепежа, инструмента и расходных материалов.</p>
+      </div>
+      <div class="bottom__copyright">
+        © 2026 ALLIANCE. Все права защищены.
+      </div>
     </div>
   </div>
 </template>
@@ -47,9 +64,9 @@ type SiteContentItem = {
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 // Реактивные переменные, нужны для обновления данных при загрузке
-const phone = ref('Номер телефона недоступен');
-const address = ref('Адрес недоступен');
-const logo = ref(' ');
+const phone = ref('');
+const address = ref('');
+const logo = ref('');
 const searchTerm = ref('');
 
 const handleCartClick = () => {
@@ -62,7 +79,7 @@ async function loadSiteContent() {
     const response = await fetch(`${API_BASE_URL}/site-content/`);
 
     // Если сервер ответил ошибкой, то не пытаться обработать данные, а просто выйти
-    if (response.ok == false) return;
+    if (!response.ok) return;
 
     const data = (await response.json()) as SiteContentItem[];
     const map = new Map<string, string>();
@@ -81,6 +98,7 @@ async function loadSiteContent() {
 }
 
 onMounted(loadSiteContent);
+
 </script>
 
 <style>
@@ -94,6 +112,8 @@ onMounted(loadSiteContent);
     background-color: #f5f6f7;
     padding-top: 0;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   .topbar{
@@ -143,6 +163,8 @@ onMounted(loadSiteContent);
     display: flex;
     align-items: center;
     z-index: 10;
+
+    border-bottom: 1px solid #e0e0e0;
   }
  
   .header__name {
@@ -187,7 +209,7 @@ onMounted(loadSiteContent);
     width: 100%;
     gap: 2px;
   }
-
+  
   h1 {
     text-align: left;
     font-size: 22px;
@@ -197,11 +219,54 @@ onMounted(loadSiteContent);
     -webkit-text-stroke: 0.3px black;
     margin: 0;
   }
-
+  
   .header__search {
     background-color: #f5f6f7;
-    border-radius: 1px;
+    border-radius: 1px
+  }
+  
+  .bottom{
+    margin-top: auto;
+    width: 100%;
+    min-height: 300px;
+    bottom: auto;
+    background-color: #1f2937;
+  }
+  
+  .bottom__container{
+    /* отступ сверху */
+    padding-top: 20px;
+    
+    /* классический способ центрирования блочного элемента */
+    margin: 0 auto;
+    
+    display: flex;
+    align-items: center;
+    max-width: 1100px;
+    justify-content: space-between;
+    
+    background-color: red;
+  }
+  
+  .bottom__copyright{
+    background-color: #eaae52;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2px 0;
+    color: white;
+  }
 
+  .bottom__info {
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 1100px;
+  }
+  
+  .alliance__text {
+    max-width: 385px;
+    background-color: green;
   }
   
   @media (max-width: 740px) {
