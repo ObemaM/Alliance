@@ -1,51 +1,51 @@
 <template>
   <div class="page">
-    <div class="topbar">
+    <!-- Aria-label для доступности -->
+    <aside class="topbar" aria-label="Контактная информация">
       <div class="topbar__container">
         <div class="topbar__item">{{ phone }}</div>
-        <div class="topbar__address">{{ address }}</div>
+        <address class="topbar__address">{{ address }}</address>
       </div>
-    </div>
+    </aside>
 
-    <div class = "header">
+    <header>
       <div class="header__container">
         <div class="header__name">
-          <img v-if="logo" :src="logo" alt="Логотип" class="header__logo" />
-          <div v-else class="header__logo"> - </div>
+          <img :src="logo" alt="Лого" class="header__logo" />
           <h1>ALLIANCE</h1>
         </div>
-        <SearchInput 
-          v-model="searchTerm"
-          placeholder="Поиск товаров..."
-          class="header__search"
-        />
+        <SearchInput v-model="searchTerm" placeholder="Поиск товаров..." class="header__search"/>
 
-        <button class="header__cart" @click="handleCartClick">
+        <button class="header__cart" @click="handleCartClick" aria-label="Открыть корзину">
           <Icon name="ShoppingCart" :size="25" />
         </button>
       </div>
-    </div>
+    </header>
 
-    <div class="content">
+    <main class="content">
       <!-- Показывает роуты в зависимости от страницы -->
       <router-view />
-    </div>
+    </main>
 
-    <div class="bottom">
+    <footer class="bottom">
       <div class="bottom__container">
-        <h2>ALLIANCE</h2>
-        <h3>Контакты</h3>
-        <h4>Информация</h4>
+        <div class="bottom__brand">
+          <h2>ALLIANCE</h2>
+        </div>
+        <nav class="bottom__nav" aria-label="Навигация по футеру">
+          <h3>Контакты</h3>
+          <h4>Информация</h4>
+        </nav>
       </div>
-      <div class="bottom__info">
+      <section class="bottom__info" aria-label="О компании">
         <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте. Широкий ассортимент крепежа, инструмента и расходных материалов.</p>
         <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте. Широкий ассортимент крепежа, инструмента и расходных материалов.</p>
         <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте. Широкий ассортимент крепежа, инструмента и расходных материалов.</p>
-      </div>
+      </section>
       <div class="bottom__copyright">
-        © 2026 ALLIANCE. Все права защищены.
+        <small>© 2026 ALLIANCE</small>
       </div>
-    </div>
+    </footer>
   </div>
 </template>
 
@@ -145,13 +145,16 @@ onMounted(loadSiteContent);
 
   .topbar__item {
     text-align: left;
+    text-decoration: none;
+    color: inherit;
   }
   
   .topbar__address {
     text-align: right;
+    font-style: normal;
   }
 
-  .header{
+  header{
     top: var(--topbar-height);
     position: sticky;
     height: var(--header-height);
@@ -229,6 +232,7 @@ onMounted(loadSiteContent);
     margin-top: auto;
     width: 100%;
     min-height: 300px;
+    justify-content: space-between;
     bottom: auto;
     background-color: #1f2937;
   }
@@ -244,29 +248,39 @@ onMounted(loadSiteContent);
     align-items: center;
     max-width: 1100px;
     justify-content: space-between;
-    
-    background-color: red;
   }
   
-  .bottom__copyright{
-    background-color: #eaae52;
-    width: 100%;
-    max-width: 1100px;
+  .bottom__brand {
+    flex-shrink: 0;
+  }
+  
+  .bottom__nav {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .bottom__copyright small {
+    padding-top: 20px;
+    border-top: 1px solid #374151;
+    display: flex;
     margin: 0 auto;
-    text-align: center;
-    padding: 2px 0;
-    color: white;
+    color: #9ca3af;
+    justify-content: center;
+    max-width: 1100px;
+    font-size: 10px;
   }
 
   .bottom__info {
+    display: flex;
     justify-content: space-between;
     margin: 0 auto;
     max-width: 1100px;
+    gap: 20px;
   }
   
   .alliance__text {
     max-width: 385px;
-    background-color: green;
+    color: #9ca3af;
   }
   
   @media (max-width: 740px) {
