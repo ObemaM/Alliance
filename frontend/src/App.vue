@@ -3,8 +3,8 @@
     <!-- Aria-label для доступности -->
     <aside class="topbar" aria-label="Контактная информация">
       <div class="topbar__container">
-        <div class="topbar__item">{{ phone }}</div>
-        <address class="topbar__address">{{ address }}</address>
+        <div class="topbar__item">☎ {{ phone }}</div>
+        <address class="topbar__address">⚐ {{ address }}</address>
       </div>
     </aside>
 
@@ -30,18 +30,30 @@
     <footer class="bottom">
       <div class="bottom__container">
         <div class="bottom__brand">
-          <h2>ALLIANCE</h2>
+          <div class="bottom__headers">
+            <h2>ALLIANCE</h2> 
+          </div>
+          <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте.</p>
         </div>
-        <nav class="bottom__nav" aria-label="Навигация по футеру">
-          <h3>Контакты</h3>
-          <h4>Информация</h4>
-        </nav>
+        <div class="bottom__contacts">
+          <div class="bottom__headers">
+            <h3>Контакты</h3>
+          </div>
+          <p class="alliance__text">Телефон: {{phone }}
+            <br>
+            Город: {{address }}</p>
+        </div>
+        <div class="bottom_information" aria-label="Навигация по футеру">
+          <div class="bottom__headers">
+            <h4>Информация</h4>
+          </div>
+          <div class="bottom__links">
+            <a href="">О нас</a>
+            <br>
+            <a href="">Доставка и оплата</a>
+          </div>
+        </div>
       </div>
-      <section class="bottom__info" aria-label="О компании">
-        <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте. Широкий ассортимент крепежа, инструмента и расходных материалов.</p>
-        <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте. Широкий ассортимент крепежа, инструмента и расходных материалов.</p>
-        <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте. Широкий ассортимент крепежа, инструмента и расходных материалов.</p>
-      </section>
       <div class="bottom__copyright">
         <small>© 2026 ALLIANCE</small>
       </div>
@@ -89,7 +101,7 @@ async function loadSiteContent() {
     }
 
     phone.value = map.get('Телефон') ?? 'Номер телефона недоступен';
-    address.value = map.get('Адрес') ?? 'Адрес недоступен'; // 𖠿
+    address.value = map.get('Адрес') ?? 'Адрес недоступен';
     logo.value = `${API_BASE_URL}${map.get('Логотип') ?? ' '}`;
   } 
   catch {
@@ -221,6 +233,7 @@ onMounted(loadSiteContent);
     letter-spacing: -0.02em;
     -webkit-text-stroke: 0.3px black;
     margin: 0;
+    line-height: 1.1;
   }
   
   .header__search {
@@ -231,8 +244,7 @@ onMounted(loadSiteContent);
   .bottom{
     margin-top: auto;
     width: 100%;
-    min-height: 300px;
-    justify-content: space-between;
+    min-height: 250px;
     bottom: auto;
     background-color: #1f2937;
   }
@@ -247,16 +259,20 @@ onMounted(loadSiteContent);
     display: flex;
     align-items: center;
     max-width: 1100px;
-    justify-content: space-between;
   }
   
   .bottom__brand {
-    flex-shrink: 0;
+    min-height: 160px;
+    margin-right: 50px;
+  }
+
+  .bottom__contacts {
+    min-height: 160px;
+    margin-right: 50px;
   }
   
-  .bottom__nav {
-    display: flex;
-    gap: 20px;
+  .bottom_information {
+    min-height: 160px;
   }
   
   .bottom__copyright small {
@@ -267,7 +283,7 @@ onMounted(loadSiteContent);
     color: #9ca3af;
     justify-content: center;
     max-width: 1100px;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .bottom__info {
@@ -279,8 +295,40 @@ onMounted(loadSiteContent);
   }
   
   .alliance__text {
+    margin-top: 15px;
     max-width: 385px;
     color: #9ca3af;
+  }
+
+  .bottom__headers {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .bottom__headers h3 {
+    margin: 0;
+  }
+  
+  .bottom__headers h4 {
+    margin: 0;
+  }
+  
+  .bottom__headers h2 {
+    margin: 0;
+  }
+
+  .bottom__links {
+    margin-top: 15px;
+  }
+
+  .bottom__links a {
+    color: #9ca3af;
+  }
+
+  .bottom__links a:hover {
+    text-decoration: underline;
+    color: #eaae52;
   }
   
   @media (max-width: 740px) {
