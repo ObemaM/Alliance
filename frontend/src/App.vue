@@ -117,6 +117,16 @@ onMounted(loadSiteContent);
   :root {
     --topbar-height: 30px;
     --header-height: 70px;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    color-scheme: light dark;
+  }
+
+  body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
   }
   
   .page {
@@ -253,6 +263,9 @@ onMounted(loadSiteContent);
     /* отступ сверху */
     padding-top: 20px;
     
+    padding-left: 20px;
+    padding-right: 20px;
+    
     /* классический способ центрирования блочного элемента */
     margin: 0 auto;
     
@@ -297,6 +310,7 @@ onMounted(loadSiteContent);
   .alliance__text {
     margin-top: 15px;
     max-width: 385px;
+    font-size: 15px;
     color: #9ca3af;
   }
 
@@ -334,7 +348,7 @@ onMounted(loadSiteContent);
   @media (max-width: 740px) {
     :root{
       --topbar-height: 30px;
-      --header-height: 70px;
+      --header-height: 110px;
     }
     
     .topbar {
@@ -359,6 +373,24 @@ onMounted(loadSiteContent);
       top: var(--topbar-height);
       height: var(--header-height);
     }
-  }
 
+    .header__container {
+      flex-wrap: wrap;
+    }
+    
+    .header__search{
+      margin-bottom: 10px;
+      min-width: 150px; 
+      margin-left: auto;
+      margin-right: auto;
+      flex-basis: 100%;
+      order: 3;
+      width: 100%;
+    }
+
+    .header__cart{
+      order: 2;
+      flex-basis: auto;
+    }
+  }
 </style>
