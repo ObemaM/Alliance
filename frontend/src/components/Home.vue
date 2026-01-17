@@ -1,32 +1,35 @@
 <template>
-  <div class="filters">
-  </div>
-  <div class="home">
-    <h1 class="home__title">Товары</h1>
-    
-    <div v-if="loading" class="home__loading">
-      Загрузка товаров...
+  <div class="home__container">
+    <div class="filters">
+      <div class="filters__title">Категории</div>
     </div>
-    
-    <div v-else-if="error" class="home__error">
-      {{ error }}
-    </div>
-    
-    <div v-else class="home__products">
-      <div v-for="product in products" :key="product.id" class="home__product">
+    <div class="home">
+      <h1 class="home__title">Товары</h1>
 
-        <!-- Показываем изображение если есть, иначе пропускаем -->
-        <div class="product__image">
-          <img 
-            v-if="product.images && product.images.length > 0" 
-            :src="`${API_BASE_URL}${product.images[0]?.url}`" 
-            alt="Product image" 
-            class="product__imageImg"
-          />
+      <div v-if="loading" class="home__loading">
+        Загрузка товаров...
+      </div>
+
+      <div v-else-if="error" class="home__error">
+        {{ error }}
+      </div>
+
+      <div v-else class="home__products">
+        <div v-for="product in products" :key="product.id" class="home__product">
+
+          <!-- Показываем изображение если есть, иначе пропускаем -->
+          <div class="product__image">
+            <img 
+              v-if="product.images && product.images.length > 0" 
+              :src="`${API_BASE_URL}${product.images[0]?.url}`" 
+              alt="Product image" 
+              class="product__imageImg"
+            />
+          </div>
+
+          <h3 class="product__name">{{ product.name }}</h3>
+          <p class="product__price">{{ product.price }} ₽</p>
         </div>
-
-        <h3 class="product__name">{{ product.name }}</h3>
-        <p class="product__price">{{ product.price }} ₽</p>
       </div>
     </div>
   </div>
@@ -86,13 +89,24 @@ onMounted(loadProducts)
 
 <style scoped>
 
+.home__container{
+  margin: 0 auto;
+  max-width: 1100px;
+  display: flex;
+  gap: 40px;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
 .home {
   padding-right: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
-  padding-left: 300px;
+  padding-left: 20px;
   max-width: 1100px;
   margin: 0 auto;
+  flex: 1;
 }
 
 .home__title {
@@ -175,6 +189,24 @@ onMounted(loadProducts)
 
 .home__product:hover .product__imageImg {
   transform: scale(1.05);
+}
+
+.filters {
+  background-color: #f3f4f6;
+  width: 250px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.filters__title{
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e1e1e;
 }
 
 @media (max-width: 1000px) {
