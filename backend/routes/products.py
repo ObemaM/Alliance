@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from database import get_db
 from models.product import Product
@@ -11,7 +12,10 @@ router = APIRouter(prefix="/products", tags=["Products"])
 
 @router.get("/", response_model=list[ProductResponse])
 async def get_all_products(db: AsyncSession = Depends(get_db)):
-    query = select(Product)
+
+    # Можно сказать, что selectionload - это просто where product_id == текущему продукту
+    query = select(Product).options(selectinload(Product.product_images))
+
     result = await db.execute(query)
     products = result.scalars().all()
     return products

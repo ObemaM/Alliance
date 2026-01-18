@@ -15,4 +15,4 @@ class Attribute(Base):
     )
 
     def __repr__(self):
-        return f"Attribute(id={self.id}, name={self.name})"
+        return self.name

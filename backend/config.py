@@ -23,8 +23,10 @@ class Settings(BaseSettings):
 
     IMAGES: str = "uploads/images"
 
-    ALLOWED_EXTENSIONS: list = ["jpg", "jpeg", "png", "mp4"]
+    ALLOWED_EXTENSIONS: list = ["jpg", "jpeg", "png", "gif", "webp", "mp4"]
     
-    MAX_SIZE: int = 5 * 1024 * 1024
+    MAX_SIZE: int = 3 * 1024 * 1024
+
+    API_BASE_URL: str = "http://localhost:8000"
 
 settings = Settings()

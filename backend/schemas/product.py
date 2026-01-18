@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import List
 
 from pydantic import BaseModel
-
+from schemas.product_image import ProductImageResponse
 
 class ProductResponse(BaseModel):
     id: int
@@ -17,6 +18,7 @@ class ProductResponse(BaseModel):
     country_id: int | None
     created_at: datetime | None
     updated_at: datetime | None
+    images: List[ProductImageResponse] = []
 
     class Config:
         from_attributes = True

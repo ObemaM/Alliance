@@ -222,7 +222,7 @@ body {
 .footer {
   padding: 18px 0;
   background: white;
-  border-top: 1px solid rgba(17, 24, 39, 0.08);
+  border-top: 1px solid #11182714;
 }
 
 .footer__inner {
@@ -238,7 +238,7 @@ body {
 }
 
 .footer__note {
-  color: rgba(17, 24, 39, 0.6);
+  color: #11182799;
 }
 
 @media (max-width: 700px) {

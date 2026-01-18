@@ -1,20 +1,35 @@
 <template>
-  <div class="home">
-    <h1 class="home__title">Товары</h1>
-    
-    <div v-if="loading" class="home__loading">
-      Загрузка товаров...
+  <div class="home__container">
+    <div class="filters">
+      <div class="filters__title">Категории</div>
     </div>
-    
-    <div v-else-if="error" class="home__error">
-      {{ error }}
-    </div>
-    
-    <div v-else class="home__products">
-      <div v-for="product in products" :key="product.id" class="home__product">
-        <h3 class="product__name">{{ product.name }}</h3>
-        <p class="product__price">{{ product.price }} ₽</p>
-        <p v-if="product.description" class="product__description">{{ product.description }}</p>
+    <div class="home">
+      <h1 class="home__title">Товары</h1>
+
+      <div v-if="loading" class="home__loading">
+        Загрузка товаров...
+      </div>
+
+      <div v-else-if="error" class="home__error">
+        {{ error }}
+      </div>
+
+      <div v-else class="home__products">
+        <div v-for="product in products" :key="product.id" class="home__product">
+
+          <!-- Показываем изображение если есть, иначе пропускаем -->
+          <div class="product__image">
+            <img 
+              v-if="product.images && product.images.length > 0" 
+              :src="`${API_BASE_URL}${product.images[0]?.url}`" 
+              alt="Product image" 
+              class="product__imageImg"
+            />
+          </div>
+
+          <h3 class="product__name">{{ product.name }}</h3>
+          <p class="product__price">{{ product.price }} ₽</p>
+        </div>
       </div>
     </div>
   </div>
@@ -23,18 +38,34 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
+interface ProductImage {
+  id: number;
+  product_id: number;
+  url: string;
+}
+
 interface Product {
   id: number
   name: string
   price: number
   description: string | null
+  category_id: number | null
+  pack_quantity: number | null
+  quantity: number | null
+  weight: string | null
+  color_id: number | null
+  material_id: number | null
+  country_id: number | null
+  created_at: string |  null 
+  updated_at: string | null
+  images: ProductImage[]
 }
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 const products = ref<Product[]>([])
 const loading = ref(true)
 const error = ref('')
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 async function loadProducts() {
   try {
@@ -57,10 +88,25 @@ onMounted(loadProducts)
 </script>
 
 <style scoped>
+
+.home__container{
+  margin: 0 auto;
+  max-width: 1100px;
+  display: flex;
+  gap: 40px;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
 .home {
-  padding: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
   max-width: 1100px;
   margin: 0 auto;
+  flex: 1;
 }
 
 .home__title {
@@ -82,41 +128,107 @@ onMounted(loadProducts)
 }
 
 .home__products {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 230px);
+  gap: 20px;
 }
 
 .home__product {
-  padding: 16px;
+  width: 230px;
+  height: 320px;
   background: white;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  transition: box-shadow 0.2s ease;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .home__product:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 24px rgba(16, 24, 40, 0.12);
 }
 
 .product__name {
-  font-size: 18px;
+  height: 60px;
+  font-size: 15px;
   font-weight: 500;
   margin: 0 0 8px 0;
   color: #1e1e1e;
+  padding: 12px 14px 0 14px;
 }
 
 .product__price {
+  height: 30px;
   font-size: 20px;
   font-weight: 600;
-  color: #eaae52;
-  margin: 0 0 8px 0;
+  color: #1e1e1e;
+  margin: 0;
+  padding: 0 14px 14px 14px;
 }
 
 .product__description {
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
   margin: 0;
   line-height: 1.5;
+}
+
+.product__image {
+  position: relative;
+  background: #f8f9fa;
+  overflow: hidden;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product__imageImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  padding: 8px;
+}
+
+.home__product:hover .product__imageImg {
+  transform: scale(1.05);
+}
+
+.filters {
+  background-color: #f3f4f6;
+  width: 250px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.filters__title{
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e1e1e;
+}
+
+@media (max-width: 1000px) {
+  .home__products {
+    grid-template-columns: repeat(2, 230px);
+  }
+}
+
+@media (max-width: 740px) {
+  .home {
+    padding-left: 20px;
+  }
+
+  .home__products {
+    grid-template-columns: repeat(1, 230px);
+    justify-content: center;
+  }
 }
 </style>
