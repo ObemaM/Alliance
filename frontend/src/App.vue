@@ -53,6 +53,7 @@
             <a href="">Доставка и оплата</a>
           </div>
         </div>
+        <img :src="`${API_BASE_URL}/uploads/images/icon.svg`" alt="" class="bottom__icon" />
       </div>
       <div class="bottom__copyright">
         <small>© 2026 ALLIANCE</small>
@@ -145,8 +146,8 @@ onMounted(loadSiteContent);
     min-height: var(--topbar-height);
 
     width: 100%; 
-    color: black;
-    background-color: #eaae52;
+    color: white;
+    background-color: #1e1e1e;
     z-index: 20;
   }
 
@@ -221,7 +222,8 @@ onMounted(loadSiteContent);
 
   .header__cart:hover {
     background-color: #f5f6f7;
-    color: #eaae52;
+    color: #1e1e1e;
+    border-radius: 15px;
   }
 
   .header__container {
@@ -256,7 +258,7 @@ onMounted(loadSiteContent);
     width: 100%;
     min-height: 250px;
     bottom: auto;
-    background-color: #1f2937;
+    background-color: #1e1e1e;
   }
   
   .bottom__container{
@@ -342,7 +344,17 @@ onMounted(loadSiteContent);
 
   .bottom__links a:hover {
     text-decoration: underline;
-    color: #eaae52;
+    color: #ffffff;
+  }
+
+  .bottom__icon{
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
   }
   
   @media (max-width: 740px) {

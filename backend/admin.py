@@ -9,6 +9,7 @@ import re
 
 from database import engine
 from models import Product, Country, Color, Category, Material, SiteContent, ProductImage, OrderItem, ProductAttribute, Order, Attribute 
+from config import settings
 
 # Импортируем app из main
 from main import app
@@ -63,6 +64,7 @@ class ProductAdmin(ModelView, model=Product):
             material_name = StringField("Материал", validators=[Optional()], render_kw={"class": "form-control"})
             color_name = StringField("Цвет", validators=[Optional()], render_kw={"class": "form-control"})
             category_name = StringField("Категория", validators=[Optional()], render_kw={"class": "form-control"})
+            file_upload = FileField("Загрузить изображения", render_kw={"class": "form-control", "multiple": True})
 
         return ProductForm
 
@@ -97,6 +99,7 @@ class ProductAdmin(ModelView, model=Product):
         category_name = (data.pop("category_name", None) or "").strip()
         if category_name:
             data["category_id"] = await self._get_or_create_by_name(Category, category_name)
+            
 
     async def on_model_delete(self, model, request):
         print(f"Удаление товара: {model.name} (ID: {model.id})")
@@ -127,13 +130,13 @@ class SiteContentAdmin(ModelView, model=SiteContent):
 
     async def on_model_change(self, data, model, is_created, request):
         upload = data.pop("file_upload", None)
-        if upload and getattr(upload, "filename", ""):
+        if upload and hasattr(upload, "filename"):
             filename = sanitize_filename(upload.filename)
             ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
             if ext not in ["jpg", "jpeg", "png"]:
                 raise ValueError("Разрешены только jpg/jpeg/png")
 
-            new_name = f"logo-{uuid.uuid4().hex}.{ext}"
+            new_name = f"logo-{uuid.uuid4().hex[:6]}.{ext}"
             upload_dir = Path("uploads/images")
             upload_dir.mkdir(parents=True, exist_ok=True)
             file_path = upload_dir / new_name
@@ -194,12 +197,49 @@ class MaterialAdmin(ModelView, model=Material):
 class ProductImageAdmin(ModelView, model=ProductImage):
     name = "Изображение товара"
     name_plural = "Изображения товаров"
-    column_list = [ProductImage.id, ProductImage.product_id, ProductImage.url]
+    column_list = [ProductImage.product, ProductImage.url]
+    form_columns = [ProductImage.product]
     column_labels = {
-        ProductImage.id: "ID",
-        ProductImage.product_id: "Товар",
+        ProductImage.product: "Товар",
         ProductImage.url: "URL изображения"
     }
+
+    async def scaffold_form(self, rules=None):
+        form = await super().scaffold_form(rules)
+        form.file_upload = FileField("Загрузить изображение", render_kw={"class": "form-control"})
+        return form
+
+    # Обработка загрузки изображений
+    async def on_model_change(self, data, model, is_created, request):
+        upload = data.pop("file_upload", None)
+        if upload and hasattr(upload, "filename"):
+            
+            # Удаление изображения, пока не знаю как
+            # if model.url:
+            #     old_file_path = Path("uploads") / model.url.lstrip("/uploads/")
+            #     if old_file_path.exists():
+            #         old_file_path.unlink()
+
+            filename = sanitize_filename(upload.filename)
+            ext = (filename.rsplit(".", 1))[-1].lower() if "." in filename else ""
+            if ext not in settings.ALLOWED_EXTENSIONS:
+                raise ValueError(f"Разрешены только {"/".join(settings.ALLOWED_EXTENSIONS)}")
+            
+            
+            new_name = f"product-{uuid.uuid4().hex[:6]}.{ext}"
+            upload_dir = Path("uploads/images")
+            upload_dir.mkdir(parents=True, exist_ok=True)
+            file_path = upload_dir / new_name
+            
+            upload.file.seek(0)
+            with open(file_path, "wb") as buffer:
+                shutil.copyfileobj(upload.file, buffer)
+            
+            new_url = f"/uploads/images/{new_name}"
+            data["url"] = new_url
+            model.url = new_url
+
+        await super().on_model_change(data, model, is_created, request)
 
 class OrderAdmin(ModelView, model=Order):
     name = "Заказ"
@@ -233,7 +273,7 @@ class ProductAttributeAdmin(ModelView, model=ProductAttribute):
     column_labels = {
         ProductAttribute.product_id: "Товар",
         ProductAttribute.attribute_id: "Атрибут",
-        ProductAttribute.value_text: "Значение"
+        ProductAttribute.value_text: "Значение (укажите единицу измерения)"
     }
 
 class AttributeAdmin(ModelView, model=Attribute):

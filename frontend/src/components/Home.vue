@@ -135,7 +135,7 @@ onMounted(loadProducts)
 
 .home__product {
   width: 230px;
-  height: 280px;
+  height: 320px;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
@@ -151,7 +151,8 @@ onMounted(loadProducts)
 }
 
 .product__name {
-  font-size: 18px;
+  height: 60px;
+  font-size: 15px;
   font-weight: 500;
   margin: 0 0 8px 0;
   color: #1e1e1e;
@@ -159,15 +160,16 @@ onMounted(loadProducts)
 }
 
 .product__price {
+  height: 30px;
   font-size: 20px;
   font-weight: 600;
-  color: #eaae52;
+  color: #1e1e1e;
   margin: 0;
   padding: 0 14px 14px 14px;
 }
 
 .product__description {
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
   margin: 0;
   line-height: 1.5;
@@ -175,16 +177,20 @@ onMounted(loadProducts)
 
 .product__image {
   position: relative;
-  height: 180px;
-  background: #f3f4f6;
+  background: #f8f9fa;
   overflow: hidden;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product__imageImg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  padding: 8px;
 }
 
 .home__product:hover .product__imageImg {

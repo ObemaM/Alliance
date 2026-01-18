@@ -41,12 +41,10 @@ class Product(Base):
     created_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     updated_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
+    # Создает управляемый атрибут класса
     @property
     def images(self):
         return self.product_images
 
     def __repr__(self) -> str:
-        return (
-            f"Product(id={self.id}, name={self.name}, price={self.price}, "
-            f"quantity={self.quantity})"
-        )
+        return self.name

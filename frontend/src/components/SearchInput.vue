@@ -67,7 +67,7 @@ function onInput(event: Event) {
 
 .search__field:focus {
   outline: none;
-  border-color: #eaae52;
+  border-color: #1e1e1e;
   background-color: #fff;
 }
 
