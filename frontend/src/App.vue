@@ -18,6 +18,7 @@
 
         <button class="header__cart" @click="handleCartClick" aria-label="Открыть корзину">
           <Icon name="ShoppingCart" :size="25" />
+          <span v-if="cartCount > 0" class="header__cart-count">{{ cartCount }}</span>
         </button>
       </div>
     </header>
@@ -56,9 +57,18 @@
         <img :src="`${API_BASE_URL}/uploads/images/icon.svg`" alt="" class="bottom__icon" />
       </div>
       <div class="bottom__copyright">
-        <small>© 2026 ALLIANCE</small>
+        <small> 2026 ALLIANCE</small>
       </div>
     </footer>
+
+    <CartDrawer
+      :is-open="isCartOpen"
+      :items="cart"
+      @close="isCartOpen = false"
+      @update-quantity="handleCartUpdateQuantity"
+      @remove-item="handleCartRemoveItem"
+      @checkout="handleCartCheckout"
+    />
   </div>
 </template>
 
@@ -66,6 +76,8 @@
 import { onMounted, ref } from 'vue';
 import Icon from './components/Icon.vue';
 import SearchInput from './components/SearchInput.vue';
+import CartDrawer from './components/CartDrawer.vue';
+import { useCart } from './composables/useCart';
 
 type SiteContentItem = {
   id: number;
@@ -76,16 +88,32 @@ type SiteContentItem = {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
-// Реактивные переменные, нужны для обновления данных при загрузке
+const { cart, cartCount, loadCart } = useCart();
+const isCartOpen = ref(false);
+
 const phone = ref('');
 const address = ref('');
 const logo = ref('');
 const searchTerm = ref('');
 
 const handleCartClick = () => {
-  console.log('Корзина открыта');
-  // Здесь будет логика открытия корзины
+  isCartOpen.value = true;
 };
+
+function handleCartUpdateQuantity(productId: number, quantity: number) {
+  const { updateQuantity } = useCart();
+  updateQuantity(productId, quantity);
+}
+
+function handleCartRemoveItem(productId: number) {
+  const { removeFromCart } = useCart();
+  removeFromCart(productId);
+}
+
+function handleCartCheckout() {
+  console.log('Оформление заказа');
+  isCartOpen.value = false;
+}
 
 async function loadSiteContent() {
   try{
@@ -110,8 +138,10 @@ async function loadSiteContent() {
   }
 }
 
-onMounted(loadSiteContent);
-
+onMounted(() => {
+  loadSiteContent();
+  loadCart();
+});
 </script>
 
 <style>
@@ -218,6 +248,24 @@ onMounted(loadSiteContent);
     cursor: pointer;
     transition: all 0.2s ease;
     color: black;
+    position: relative;
+  }
+
+  .header__cart-count {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #dc2626;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
   }
 
   .header__cart:hover {

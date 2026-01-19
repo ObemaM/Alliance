@@ -21,6 +21,7 @@ class Product(Base):
     color_id: Mapped[int | None] = mapped_column(ForeignKey("colors.id"), nullable=True)
     material_id: Mapped[int | None] = mapped_column(ForeignKey("materials.id"), nullable=True)
     country_id: Mapped[int | None] = mapped_column(ForeignKey("countries.id"), nullable=True)
+    purpose: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     # Связи с другими таблицами
     category: Mapped["Category"] = relationship("Category", lazy="select")
