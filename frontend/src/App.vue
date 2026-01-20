@@ -18,7 +18,7 @@
 
         <button class="header__cart" @click="handleCartClick" aria-label="Открыть корзину">
           <Icon name="ShoppingCart" :size="25" />
-          <span v-if="cartCount > 0" class="header__cart-count">{{ cartCount }}</span>
+          <span v-if="cartCount > 0" class="header__cart-count"> {{ cartCount }} </span>
         </button>
       </div>
     </header>
@@ -60,15 +60,14 @@
         <small> 2026 ALLIANCE</small>
       </div>
     </footer>
-
-    <CartDrawer
+    <CartDrawer 
       :is-open="isCartOpen"
       :items="cart"
       @close="isCartOpen = false"
-      @update-quantity="handleCartUpdateQuantity"
-      @remove-item="handleCartRemoveItem"
-      @checkout="handleCartCheckout"
-    />
+      @update-quantity="handleUpdateQuantity"
+      @remove-item="handleRemoveItem"
+      @checkout="handleCheckout"
+      @clear-cart="handleClearCart" />
   </div>
 </template>
 
@@ -76,8 +75,8 @@
 import { onMounted, ref } from 'vue';
 import Icon from './components/Icon.vue';
 import SearchInput from './components/SearchInput.vue';
+import { useCart } from './composables/useCart'
 import CartDrawer from './components/CartDrawer.vue';
-import { useCart } from './composables/useCart';
 
 type SiteContentItem = {
   id: number;
@@ -88,31 +87,36 @@ type SiteContentItem = {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
-const { cart, cartCount, loadCart } = useCart();
-const isCartOpen = ref(false);
-
+// Реактивные переменные, нужны для обновления данных при загрузке
 const phone = ref('');
 const address = ref('');
 const logo = ref('');
 const searchTerm = ref('');
 
+const isCartOpen = ref(false);
+
+const { cart, cartCount, loadCart, updateQuantity, removeFromCart, clearCart } = useCart();
+
 const handleCartClick = () => {
-  isCartOpen.value = true;
+  isCartOpen.value = !isCartOpen.value;
 };
 
-function handleCartUpdateQuantity(productId: number, quantity: number) {
-  const { updateQuantity } = useCart();
+function handleUpdateQuantity(productId: number, quantity: number) {
   updateQuantity(productId, quantity);
 }
 
-function handleCartRemoveItem(productId: number) {
-  const { removeFromCart } = useCart();
+function handleRemoveItem(productId: number) {
   removeFromCart(productId);
 }
 
-function handleCartCheckout() {
+function handleCheckout() {
   console.log('Оформление заказа');
+  clearCart();
   isCartOpen.value = false;
+}
+
+function handleClearCart() {
+  clearCart();
 }
 
 async function loadSiteContent() {
@@ -142,6 +146,7 @@ onMounted(() => {
   loadSiteContent();
   loadCart();
 });
+
 </script>
 
 <style>
@@ -239,6 +244,7 @@ onMounted(() => {
   }
 
   .header__cart{
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -248,24 +254,6 @@ onMounted(() => {
     cursor: pointer;
     transition: all 0.2s ease;
     color: black;
-    position: relative;
-  }
-
-  .header__cart-count {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: #dc2626;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 5px;
   }
 
   .header__cart:hover {
@@ -403,6 +391,20 @@ onMounted(() => {
     margin: 0 auto;
     width: 100px;
     height: 100px;
+  }
+
+  .header__cart-count {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #bd0707;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   @media (max-width: 740px) {

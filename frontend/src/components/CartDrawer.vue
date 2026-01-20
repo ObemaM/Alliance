@@ -56,6 +56,9 @@
         <button class="cart-drawer__checkout" @click="handleCheckout">
           Оформить заказ
         </button>
+        <button class="cart-drawer__clear" @click="handleClearCart">
+          Очистить корзину
+        </button>
         <p class="cart-drawer__note">Менеджер свяжется с вами для уточнения деталей.</p>
       </div>
     </div>
@@ -86,6 +89,7 @@ interface Emits {
   (e: 'updateQuantity', productId: number, quantity: number): void;
   (e: 'removeItem', productId: number): void;
   (e: 'checkout'): void;
+  (e: 'clearCart'): void;
 }
 
 const props = defineProps<Props>();
@@ -111,6 +115,10 @@ function removeItem(productId: number) {
 
 function handleCheckout() {
   emit('checkout');
+}
+
+function handleClearCart() {
+  emit('clearCart');
 }
 </script>
 
@@ -365,6 +373,29 @@ function handleCheckout() {
   background: #374151;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cart-drawer__clear {
+  width: 100%;
+  background: white;
+  color: #bd0707;
+  border: 1px solid #bd0707;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.cart-drawer__clear:hover {
+  background: #bd0707;
+  color: white;
 }
 
 .cart-drawer__note {

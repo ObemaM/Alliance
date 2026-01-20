@@ -71,7 +71,7 @@
               <p class="product__price">{{ product.price }} ₽</p>
               <p class="product__priceUnit">за шт.</p>
             </div>
-            <button class="product__cartBtn" type="button" @click = addToCart(product)>
+            <button class="product__cartBtn" type="button" @click="addToCart(product)">
               <Icon name="ShoppingCart" :size="20" className="product__cartIcon" />
             </button>
           </div>
@@ -84,8 +84,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Icon from './Icon.vue'
 import { useCart } from '../composables/useCart'
+import Icon from './Icon.vue'
 
 interface ProductImage {
   id: number;
@@ -118,7 +118,7 @@ const loading = ref(true)
 const error = ref('')
 const activeFilters = ref<string[]>([])
 
-const { addToCart, loadCart } = useCart();
+const { addToCart } = useCart()
 
 async function loadProducts() {
   try {
@@ -148,10 +148,7 @@ function toggleFilter(filter: string){
 }
 
 
-onMounted(() => {
-  loadProducts()
-  loadCart()
-})
+onMounted(loadProducts)
 </script>
 
 <style scoped>
