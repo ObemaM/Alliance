@@ -28,7 +28,6 @@
                 <button
                   class="cart-item__btn"
                   @click="updateQuantity(item.product.id, item.quantity - 1)"
-                  :disabled="item.quantity <= 1"
                 >
                   -
                 </button>
@@ -40,11 +39,14 @@
                   +
                 </button>
                 <button class="cart-item__remove" @click="removeItem(item.product.id)">
-                  <Icon name="Trash2" :size="16" />
+                  <Icon name="Trash2" :size="20" />
                 </button>
               </div>
             </div>
           </div>
+          <button class="cart-drawer__clear" @click="openClearDialog">
+            Очистить корзину
+          </button>
         </div>
       </div>
 
@@ -56,17 +58,28 @@
         <button class="cart-drawer__checkout" @click="handleCheckout">
           Оформить заказ
         </button>
-        <button class="cart-drawer__clear" @click="handleClearCart">
-          Очистить корзину
+      </div>
+    </div>
+  </div>
+  <!-- Диалог подтверждения очистки корзины -->
+  <div v-if="showClearCartButton" class="dialog-overlay" @click="cancelClearDialog">
+    <div class="dialog" @click.stop>
+      <h3>Подтверждение</h3>
+      <p>Вы действительно хотите очистить корзину?</p>
+      <div class="dialog-buttons">
+        <button class="dialog-btn dialog-btn--cancel" @click="cancelClearDialog">
+          Отмена
         </button>
-        <p class="cart-drawer__note">Менеджер свяжется с вами для уточнения деталей.</p>
+        <button class="dialog-btn dialog-btn--confirm" @click="confirmClearDialog">
+          Очистить
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import Icon from './Icon.vue';
 
 interface CartItem {
@@ -95,6 +108,8 @@ interface Emits {
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
+const showClearCartButton = ref(false);
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 const total = computed(() => {
@@ -120,6 +135,22 @@ function handleCheckout() {
 function handleClearCart() {
   emit('clearCart');
 }
+
+function openClearDialog() {
+  showClearCartButton.value = true;
+}
+
+function confirmClearDialog() {
+  handleClearCart();
+  showClearCartButton.value = false;
+}
+
+function cancelClearDialog() {
+  showClearCartButton.value = false;
+}
+
+
+
 </script>
 
 <style scoped>
@@ -181,17 +212,16 @@ function handleClearCart() {
   border: none;
   padding: 8px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s ease;
-  color: #6b7280;
+  color: #1e1e1e;
 }
 
 .cart-drawer__close:hover {
   background: #e5e7eb;
-  color: #1e1e1e;
 }
 
 .cart-drawer__content {
@@ -200,10 +230,18 @@ function handleClearCart() {
   padding: 20px;
 }
 
-.cart-drawer__empty {
+.cart-drawer__note {
+  font-size: 13px;
+  color: #9ca3af;
   text-align: center;
+  margin: 10px 0 0 0;
+}
+
+.cart-drawer__empty {
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
   color: #6b7280;
-  margin-top: 60px;
 }
 
 .cart-drawer__empty-text {
@@ -312,10 +350,11 @@ function handleClearCart() {
 
 .cart-item__remove {
   background: none;
+  border-radius: 12px;
   border: none;
   padding: 6px;
   cursor: pointer;
-  color: #dc2626;
+  color: #bd0707;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -324,7 +363,7 @@ function handleClearCart() {
 }
 
 .cart-item__remove:hover {
-  color: #b91c1c;
+  background: #e5e7eb;
 }
 
 .cart-drawer__footer {
@@ -376,11 +415,11 @@ function handleClearCart() {
 }
 
 .cart-drawer__clear {
-  width: 100%;
+  width: 35%;
   background: white;
-  color: #bd0707;
-  border: 1px solid #bd0707;
-  padding: 12px 20px;
+  color: #1e1e1e;
+  border: 1px solid #1e1e1e;
+  padding: 10px 10px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
@@ -394,14 +433,70 @@ function handleClearCart() {
 }
 
 .cart-drawer__clear:hover {
+  background: #1e1e1e;
+  color: white;
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.dialog {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+}
+
+.dialog h3 {
+  margin: 0 0 16px 0;
+  color: #1e1e1e;
+}
+
+.dialog p {
+  margin: 0 0 24px 0;
+  color: #6b7280;
+}
+
+.dialog-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.dialog-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dialog-btn--cancel {
+  background: #f5f6f7;
+  color: #1e1e1e;
+}
+
+.dialog-btn--cancel:hover {
+  background: #e5e7eb;
+}
+
+.dialog-btn--confirm {
   background: #bd0707;
   color: white;
 }
 
-.cart-drawer__note {
-  font-size: 13px;
-  color: #9ca3af;
-  text-align: center;
-  margin: 10px 0 0 0;
+.dialog-btn--confirm:hover {
+  background: #9a0606;
 }
 </style>

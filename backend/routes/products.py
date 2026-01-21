@@ -11,11 +11,16 @@ from schemas.product import ProductResponse, ProductCreate, ProductUpdate
 router = APIRouter(prefix="/products", tags=["Products"])
 
 @router.get("/", response_model=list[ProductResponse])
-async def get_all_products(db: AsyncSession = Depends(get_db)):
+async def get_all_products(q: str | None = None, db: AsyncSession = Depends(get_db)):
 
-    # Можно сказать, что selectionload - это просто where product_id == текущему продукту
+    # Можно сказать, что selectinload - это просто where product_id == текущему продукту
     query = select(Product).options(selectinload(Product.product_images))
-
+    if q:
+        query = query.where(
+            (Product.name.ilike(f"%{q}%") | 
+            Product.description.ilike(f"%{q}%"))
+        )
+    
     result = await db.execute(query)
     products = result.scalars().all()
     return products

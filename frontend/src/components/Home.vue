@@ -53,7 +53,7 @@
       </div>
 
       <div v-else class="home__products">
-        <div v-for="product in products" :key="product.id" class="home__product">
+        <div v-for="product in displayedProducts" :key="product.id" class="home__product">
 
           <!-- Показываем изображение если есть, иначе пропускаем -->
           <div class="product__image">
@@ -83,7 +83,7 @@
 
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject, computed, type Ref } from 'vue'
 import { useCart } from '../composables/useCart'
 import Icon from './Icon.vue'
 
@@ -119,6 +119,17 @@ const error = ref('')
 const activeFilters = ref<string[]>([])
 
 const { addToCart } = useCart()
+
+// Получаем результаты поиска из App.vue через inject
+const searchResults = inject<Ref<Product[]>>('searchResults');
+
+// Вычисляемые товары: если есть результаты поиска - показываем их, иначе все товары
+const displayedProducts = computed(() => {
+  if (searchResults?.value && searchResults.value.length > 0) {
+    return searchResults.value;
+  }
+  return products.value;
+});
 
 async function loadProducts() {
   try {

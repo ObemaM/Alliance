@@ -77,6 +77,9 @@ import Icon from './components/Icon.vue';
 import SearchInput from './components/SearchInput.vue';
 import { useCart } from './composables/useCart'
 import CartDrawer from './components/CartDrawer.vue';
+import { useSearch } from './composables/useSearch';
+import { provide } from 'vue';
+ 
 
 type SiteContentItem = {
   id: number;
@@ -91,9 +94,11 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000
 const phone = ref('');
 const address = ref('');
 const logo = ref('');
-const searchTerm = ref('');
-
+const searchTerm = ref ('')
+const { searchResults } = useSearch(searchTerm)
 const isCartOpen = ref(false);
+
+provide('searchResults', searchResults)
 
 const { cart, cartCount, loadCart, updateQuantity, removeFromCart, clearCart } = useCart();
 
