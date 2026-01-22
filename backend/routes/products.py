@@ -11,15 +11,34 @@ from schemas.product import ProductResponse, ProductCreate, ProductUpdate
 router = APIRouter(prefix="/products", tags=["Products"])
 
 @router.get("/", response_model=list[ProductResponse])
-async def get_all_products(q: str | None = None, db: AsyncSession = Depends(get_db)):
+async def get_all_products(
+    q: str | None = None,
+    name: str | None = None,
+    category: int | None = None,
+    min_price: float | None = None,
+    max_price: float | None = None,
+    db: AsyncSession = Depends(get_db),
+):
 
     # Можно сказать, что selectinload - это просто where product_id == текущему продукту
     query = select(Product).options(selectinload(Product.product_images))
-    if q:
+
+    search = q or name
+
+    if search:
         query = query.where(
-            (Product.name.ilike(f"%{q}%") | 
-            Product.description.ilike(f"%{q}%"))
+            (Product.name.ilike(f"%{search}%") |
+            Product.description.ilike(f"%{search}%"))
         )
+
+    if category:
+        query = query.where(Product.category_id == category)
+
+    if min_price is not None:
+        query = query.where(Product.price >= min_price)
+
+    if max_price is not None:
+        query = query.where(Product.price <= max_price)
     
     result = await db.execute(query)
     products = result.scalars().all()

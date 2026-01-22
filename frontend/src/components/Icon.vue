@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { ShoppingCart, Search, Trash2, X } from 'lucide-vue-next'
+import { ShoppingCart, Search, Trash2, X, ChevronDown, ChevronRight } from 'lucide-vue-next'
 
 interface Props {
   name: string
@@ -25,6 +25,10 @@ const iconComponent = computed(() => {
       return Search
     case 'Trash2':
       return Trash2
+    case 'ChevronDown':
+      return ChevronDown
+    case 'ChevronRight':
+      return ChevronRight
     case 'X':
       return X
   }

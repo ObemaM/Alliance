@@ -3,41 +3,82 @@
     <div class="filters">
       <div class="filters__title">Фильтры</div>
       <div class="options">
-        <div
-          class="filter__option"
-          :class="{ 'filter__option--active': activeFilters.includes('category') }"
-          @click="toggleFilter('category')"
-        >
+        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('category') }"
+          @click="toggleFilter('category')">
           Категория
+          <div v-if="activeFilters.includes('category')">
+            <Icon name="ChevronDown" :size="20" class="chevron" />
+          </div>
+          <div v-else>
+            <Icon name="ChevronRight" :size="20" class="chevron" />
+          </div>
         </div>
-        <div
-          class="filter__option"
-          :class="{ 'filter__option--active': activeFilters.includes('price') }"
-          @click="toggleFilter('price')"
-        >
+
+        <div v-if="activeFilters.includes('category')">
+          <div class="category_filter">
+            <label class="category_filter__label">Выберите категорию</label>
+            <select v-model="selectedCategory">
+              <option :value="null">Все категории</option>
+              <option v-for="category in categories" :key="category.id" :value="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('price') }"
+          @click="toggleFilter('price')">
           Цена
+          <div v-if="activeFilters.includes('price')">
+            <Icon name="ChevronDown" :size="20" class="chevron" />
+          </div>
+          <div v-else>
+            <Icon name="ChevronRight" :size="20" class="chevron" />
+          </div>
         </div>
-        <div
-          class="filter__option"
-          :class="{ 'filter__option--active': activeFilters.includes('material') }"
-          @click="toggleFilter('material')"
-        >
+
+        <div v-if="activeFilters.includes('price')">
+          <div class="category_filter">
+            <label class="category_filter__label">Выберите цену</label>
+            <div class="category_filter__price">
+              <input type="number" v-model="minPrice" placeholder="От">
+              <input type="number" v-model="maxPrice" placeholder="До">
+            </div>
+          </div>
+        </div>
+
+        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('material') }"
+          @click="toggleFilter('material')">
           Материал
+          <div v-if="activeFilters.includes('material')">
+            <Icon name="ChevronDown" :size="20" class="chevron" />
+          </div>
+          <div v-else>
+            <Icon name="ChevronRight" :size="20" class="chevron" />
+          </div>
         </div>
-        <div
-          class="filter__option"
-          :class="{ 'filter__option--active': activeFilters.includes('purpose') }"
-          @click="toggleFilter('purpose')"
-        >
+
+        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('purpose') }"
+          @click="toggleFilter('purpose')">
           Назначение
+          <div v-if="activeFilters.includes('purpose')">
+            <Icon name="ChevronDown" :size="20" class="chevron" />
+          </div>
+          <div v-else>
+            <Icon name="ChevronRight" :size="20" class="chevron" />
+          </div>
         </div>
-        <div
-          class="filter__end"
-          :class="{ 'filter__end--active': activeFilters.includes('color') }"
-          @click="toggleFilter('color')"
-        >
+        <div class="filter__end" :class="{ 'filter__end--active': activeFilters.includes('color') }"
+          @click="toggleFilter('color')">
           Цвет
+          <div v-if="activeFilters.includes('color')">
+            <Icon name="ChevronDown" :size="20" class="chevron" />
+          </div>
+          <div v-else>
+            <Icon name="ChevronRight" :size="20" class="chevron" />
+          </div>
         </div>
+
 
       </div>
     </div>
@@ -57,12 +98,8 @@
 
           <!-- Показываем изображение если есть, иначе пропускаем -->
           <div class="product__image">
-            <img
-              v-if="product.images && product.images.length > 0"
-              :src="`${API_BASE_URL}${product.images[0]?.url}`"
-              alt="Product image"
-              class="product__imageImg"
-            />
+            <img v-if="product.images && product.images.length > 0" :src="`${API_BASE_URL}${product.images[0]?.url}`"
+              alt="Product image" class="product__imageImg" />
           </div>
 
           <h3 class="product__name">{{ product.name }}</h3>
@@ -83,7 +120,7 @@
 
 
 <script setup lang="ts">
-import { ref, onMounted, inject, computed, type Ref } from 'vue'
+import { ref, onMounted, inject, computed, watch, type Ref } from 'vue'
 import { useCart } from '../composables/useCart'
 import Icon from './Icon.vue'
 
@@ -106,9 +143,14 @@ interface Product {
   material_id: number | null
   country_id: number | null
   purpose: string | null
-  created_at: string |  null 
+  created_at: string | null
   updated_at: string | null
   images: ProductImage[]
+}
+
+interface Category {
+  id: number
+  name: string
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
@@ -117,6 +159,12 @@ const products = ref<Product[]>([])
 const loading = ref(true)
 const error = ref('')
 const activeFilters = ref<string[]>([])
+
+const minPrice = ref('')
+const selectedCategory = ref<number | null>(null)
+const maxPrice = ref('')
+
+const categories = ref<Category[]>([])
 
 const { addToCart } = useCart()
 
@@ -131,14 +179,37 @@ const displayedProducts = computed(() => {
   return products.value;
 });
 
+async function getCategories() {
+  const response = await fetch(`${API_BASE_URL}/categories/available`)
+
+  if (response.ok) {
+    const data = await response.json()
+    categories.value = data
+  }
+}
+
 async function loadProducts() {
   try {
-    const response = await fetch(`${API_BASE_URL}/products`)
-    
+    const params = new URLSearchParams();
+    if (activeFilters.value.includes('category') && selectedCategory.value) {
+      params.set('category', String(selectedCategory.value))
+    }
+    if (activeFilters.value.includes('price')) {
+      const min = parseFloat(minPrice.value);
+      const max = parseFloat(maxPrice.value);
+      
+      // NaN - Not a Number
+      if (!Number.isNaN(min)) params.set('min_price', String(min))
+      if (!Number.isNaN(max)) params.set('max_price', String(max))
+    }
+
+    const url = `${API_BASE_URL}/products${params.toString() ? `/?${params.toString()}` : ''}`
+    const response = await fetch(url)
+
     if (!response.ok) {
       throw new Error('Ошибка загрузки товаров')
     }
-    
+
     const data = await response.json()
     products.value = data
   } catch (err) {
@@ -148,8 +219,45 @@ async function loadProducts() {
   }
 }
 
-function toggleFilter(filter: string){
-  if (activeFilters.value.includes(filter)){
+watch(
+  [minPrice, maxPrice],
+  () => {
+    if (activeFilters.value.includes('price')) {
+      loadProducts()
+    }
+  },
+)
+
+watch(
+  selectedCategory,
+  () => {
+    if (activeFilters.value.includes('category')) {
+      loadProducts()
+    }
+  },
+)
+
+watch(
+  activeFilters,
+  () => {
+    if (activeFilters.value.includes('price')) {
+      loadProducts()
+    }
+  },
+)
+
+watch(
+  activeFilters, 
+  () => {
+    if (activeFilters.value.includes('category')) {
+      loadProducts()
+    }
+  },
+)
+
+
+function toggleFilter(filter: string) {
+  if (activeFilters.value.includes(filter)) {
     // Если фильтр уже есть - создаём новый массив без него
     activeFilters.value = activeFilters.value.filter(f => f !== filter)
   } else {
@@ -159,12 +267,14 @@ function toggleFilter(filter: string){
 }
 
 
-onMounted(loadProducts)
+onMounted(() => {
+  getCategories()
+  loadProducts()
+})
 </script>
 
 <style scoped>
-
-.home__container{
+.home__container {
   margin: 0 auto;
   max-width: 1100px;
   display: flex;
@@ -173,6 +283,7 @@ onMounted(loadProducts)
   padding-left: 20px;
   padding-bottom: 20px;
 }
+
 
 .home {
   padding-right: 20px;
@@ -331,10 +442,11 @@ onMounted(loadProducts)
   border-radius: 8px;
   height: fit-content;
   position: sticky;
-  top: calc(30px + 70px + 16px + 10px); /* topbar + header + padding + margin */
+  top: calc(30px + 70px + 16px + 10px);
+  /* topbar + header + padding + margin */
 }
 
-.filters__title{
+.filters__title {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   color: #ffffff;
@@ -346,7 +458,13 @@ onMounted(loadProducts)
   font-weight: 600;
 }
 
-.filter__option{
+.chevron {
+  display: flex;
+  flex-direction: row;
+  color: #1e1e1e;
+}
+
+.filter__option {
   color: #1e1e1e;
   padding: 12px 12px;
   border-right: 1px solid #e5e7eb;
@@ -354,19 +472,21 @@ onMounted(loadProducts)
   border-bottom: 1px solid #e5e7eb;
   background: white;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.filter__option:hover{
-  background: #f3f4f6;
+.filter__option:hover {
+  background: #EFEFEF;
 }
 
-.filter__option--active{
-  background: #e5e7eb;
-  font-weight: 600;
+.filter__option--active {
+  background: #EFEFEF;
 }
 
-.filter__end{
+.filter__end {
   color: #1e1e1e;
   padding: 12px 12px;
   border-right: 1px solid #e5e7eb;
@@ -374,20 +494,83 @@ onMounted(loadProducts)
   border-bottom: 1px solid #e5e7eb;
   background: white;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.filter__end:hover{
-  background: #f3f4f6;
+.filter__end:hover {
+  background: #EFEFEF;
 }
 
-.filter__end--active{
-  background: #e5e7eb;
-  font-weight: 600;
+.filter__end--active {
+  background: #EFEFEF;
 }
 
+.category_filter {
+  padding: 16px;
+  border-right: 1px solid #e5e7eb;
+  border-left: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.category_filter__label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.category_filter select,
+.category_filter input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1e1e1e;
+  background: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+.category_filter select:hover,
+.category_filter input:hover {
+  border-color: #9ca3af;
+}
+
+.category_filter select:focus,
+.category_filter input:focus {
+  border-color: #1e1e1e;
+}
+
+.category_filter__price {
+  display: flex;
+  gap: 10px;
+}
+
+.category_filter__price input {
+  flex: 1;
+}
+
+/* Chrome, Edge, Safari */
+.category_filter input[type="number"]::-webkit-outer-spin-button,
+.category_filter input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.category_filter input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
 
 @media (max-width: 1000px) {
   .home__products {
@@ -399,7 +582,7 @@ onMounted(loadProducts)
   .home {
     padding-left: 20px;
   }
-
+  
   .home__products {
     grid-template-columns: repeat(1, 230px);
     justify-content: center;

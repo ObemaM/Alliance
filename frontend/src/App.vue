@@ -49,7 +49,7 @@
             <h4>Информация</h4>
           </div>
           <div class="bottom__links">
-            <a href="">О нас</a>
+            <a href="https://www.ozon.ru/seller/alliance-3804007/?miniapp=seller_3804007">OZON</a>
             <br>
             <a href="">Доставка и оплата</a>
           </div>
