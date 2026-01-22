@@ -45,4 +45,3 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Подключаем админку
 from admin import admin
-

@@ -2,15 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from database import get_db
-from schemas.category import CategoryResponse, CategoryCreate, CategoryUpdate
-from models.category import Category    
+from schemas.category import CategoryResponse, CategoryCreate, CategoryUpdate, CategoryNameResponse
+from models.category import Category
+from models.product import Product    
 
 router = APIRouter(prefix="/categories", tags=["Categories"])
 
 # Depends для get запросов
-@router.get("/", response_model=list[CategoryResponse])
+@router.get("/available", response_model=list[CategoryNameResponse])
 async def get_all_categories(db: AsyncSession = Depends(get_db)):
-    query = select(Category)
+    query = select(Category).join(Product, Category.id == Product.category_id).distinct()
 
     result = await db.execute(query)
     # Убирает всю служебную обертку и оставляет только ORM-объекты, all() - возвращает все записи списком
@@ -29,6 +30,7 @@ async def create_category(category: CategoryCreate, db: AsyncSession = Depends(g
     await db.commit()
     await db.refresh(new_category)
     return new_category
+
 
 @router.patch("/{category_id}", response_model=CategoryResponse)
 async def update_category(

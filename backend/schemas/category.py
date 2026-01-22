@@ -8,6 +8,13 @@ class CategoryResponse(BaseModel):
     
     class Config:
         from_attributes = True  # Позволяет создавать схему из ORM-модели
+    
+class CategoryNameResponse(BaseModel):
+    id: int
+    name: str
+    
+    class Config:
+        from_attributes = True
 
 # Создание
 class CategoryCreate(BaseModel):

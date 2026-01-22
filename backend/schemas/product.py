@@ -16,6 +16,7 @@ class ProductResponse(BaseModel):
     color_id: int | None
     material_id: int | None
     country_id: int | None
+    purpose: str | None
     created_at: datetime | None
     updated_at: datetime | None
     images: List[ProductImageResponse] = []
@@ -35,6 +36,7 @@ class ProductCreate(BaseModel):
     color_id: int | None = None
     material_id: int | None = None
     country_id: int | None = None
+    purpose: str | None = None
 
 
 class ProductUpdate(BaseModel):
@@ -48,3 +50,4 @@ class ProductUpdate(BaseModel):
     color_id: int | None = None
     material_id: int | None = None
     country_id: int | None = None
+    purpose: str | None = None
