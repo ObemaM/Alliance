@@ -17,6 +17,9 @@ async def get_all_products(
     category: int | None = None,
     min_price: float | None = None,
     max_price: float | None = None,
+    material: int | None = None,
+    color: int | None = None,
+    country: int | None = None,
     db: AsyncSession = Depends(get_db),
 ):
 
@@ -33,6 +36,15 @@ async def get_all_products(
 
     if category:
         query = query.where(Product.category_id == category)
+
+    if material:
+        query = query.where(Product.material_id == material)
+
+    if color:
+        query = query.where(Product.color_id == color)
+
+    if country:
+        query = query.where(Product.country_id == country)
 
     if min_price is not None:
         query = query.where(Product.price >= min_price)

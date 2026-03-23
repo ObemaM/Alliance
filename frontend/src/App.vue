@@ -29,14 +29,14 @@
     </main>
 
     <footer class="bottom">
-      <div class="bottom__container">
-        <div class="bottom__brand">
+      <div class="bottom__info">
+        <div class="bottom__brand" aria-label="О компании">
           <div class="bottom__headers">
-            <h2>ALLIANCE</h2> 
+            <h2>ALLIANCE</h2>
           </div>
-          <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте.</p>
+          <p class="alliance__text">Крепеж и строительные материалы. Доставка по Санкт-Петербургу и Ленинградской области.</p>
         </div>
-        <div class="bottom__contacts">
+        <div class="bottom__contacts" aria-label="Контакты">
           <div class="bottom__headers">
             <h3>Контакты</h3>
           </div>
@@ -44,17 +44,24 @@
             <br>
             Город: {{address }}</p>
         </div>
-        <div class="bottom_information" aria-label="Навигация по футеру">
+        <div class="bottom__information" aria-label="Навигация по футеру">
           <div class="bottom__headers">
             <h4>Информация</h4>
           </div>
           <div class="bottom__links">
             <a href="https://www.ozon.ru/seller/alliance-3804007/?miniapp=seller_3804007">OZON</a>
-            <br>
             <a href="">Доставка и оплата</a>
+            <a href="">Каталог товаров</a>
           </div>
         </div>
-        <img :src="`${API_BASE_URL}/uploads/images/icon.svg`" alt="" class="bottom__icon" />
+        <div class="bottom__additional" aria-label="Дополнительная информация">
+          <div class="bottom__headers">
+            <h4>Дополнительно</h4>
+          </div>
+          <div class="bottom__links">
+            <a href="">О компании</a>
+          </div>
+        </div>
       </div>
       <div class="bottom__copyright">
         <small> 2026 ALLIANCE</small>
@@ -297,94 +304,99 @@ onMounted(() => {
   .bottom{
     margin-top: auto;
     width: 100%;
-    min-height: 250px;
-    bottom: auto;
+    min-height: 280px;
     background-color: #1e1e1e;
+    padding: 48px 0 24px;
   }
   
   .bottom__container{
-    /* отступ сверху */
-    padding-top: 20px;
-    
-    padding-left: 20px;
-    padding-right: 20px;
-    
-    /* классический способ центрирования блочного элемента */
-    margin: 0 auto;
-    
-    display: flex;
-    align-items: center;
     max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   
   .bottom__brand {
-    min-height: 160px;
-    margin-right: 50px;
+    width: fit-content;
+    min-width: 200px;
   }
 
   .bottom__contacts {
-    min-height: 160px;
-    margin-right: 50px;
+    width: fit-content;
+    min-width: 200px;
+  }
+
+  .bottom__additional {
+    width: fit-content;
+    min-width: 200px;
+  }
+
+  .bottom__information {
+    width: fit-content;
+    min-width: 150px;
   }
   
-  .bottom_information {
-    min-height: 160px;
-  }
-  
-  .bottom__copyright small {
-    padding-top: 20px;
+  .bottom__copyright {
+    margin-top: 32px;
+    padding-top: 24px;
     border-top: 1px solid #374151;
     display: flex;
-    margin: 0 auto;
-    color: #9ca3af;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .bottom__copyright small {
+    color: #9ca3af;
     font-size: 12px;
   }
 
   .bottom__info {
     display: flex;
     justify-content: space-between;
-    margin: 0 auto;
+    gap: 40px;
     max-width: 1100px;
-    gap: 20px;
+    margin: 0 auto;
   }
   
   .alliance__text {
-    margin-top: 15px;
-    max-width: 385px;
-    font-size: 15px;
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.6;
     color: #9ca3af;
   }
 
   .bottom__headers {
-    min-height: 40px;
-    display: flex;
-    align-items: center;
+    margin-bottom: 8px;
   }
   
-  .bottom__headers h3 {
-    margin: 0;
-  }
-  
+  .bottom__headers h2,
+  .bottom__headers h3,
   .bottom__headers h4 {
     margin: 0;
-  }
-  
-  .bottom__headers h2 {
-    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #f9fafb;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .bottom__links {
-    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .bottom__links a {
     color: #9ca3af;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    line-height: 1.5;
   }
 
   .bottom__links a:hover {
-    text-decoration: underline;
     color: #ffffff;
   }
 

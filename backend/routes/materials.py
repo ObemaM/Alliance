@@ -4,11 +4,21 @@ from sqlalchemy import select
 
 from database import get_db
 from models.material import Material
+from models.product import Product
 from schemas.material import MaterialResponse
 from schemas.material import MaterialCreate
 from schemas.material import MaterialUpdate
 
 router = APIRouter(prefix="/materials", tags=["Materials"])
+
+@router.get("/available", response_model=list[MaterialResponse])
+async def get_available_materials(db: AsyncSession = Depends(get_db)):
+    query = select(Material).join(Product, Material.id == Product.material_id).distinct()
+
+    result = await db.execute(query)
+    materials = result.scalars().all()
+
+    return materials
 
 @router.get("/", response_model=list[MaterialResponse])
 async def get_all_materials(db: AsyncSession = Depends(get_db)):

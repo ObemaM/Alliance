@@ -26,6 +26,29 @@
           </div>
         </div>
 
+        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('material') }"
+          @click="toggleFilter('material')">
+          Материал
+          <div v-if="activeFilters.includes('material')">
+            <Icon name="ChevronDown" :size="20" class="chevron" />
+          </div>
+          <div v-else>
+            <Icon name="ChevronRight" :size="20" class="chevron" />
+          </div>
+        </div>
+
+        <div v-if="activeFilters.includes('material')">
+          <div class="category_filter">
+            <label class="category_filter__label">Выберите материал</label>
+            <select v-model="selectedMaterial">
+              <option :value="null">Все материалы</option>
+              <option v-for="material in materials" :key="material.id" :value="material.id">
+                {{ material.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
         <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('price') }"
           @click="toggleFilter('price')">
           Цена
@@ -47,10 +70,10 @@
           </div>
         </div>
 
-        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('material') }"
-          @click="toggleFilter('material')">
-          Материал
-          <div v-if="activeFilters.includes('material')">
+        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('country') }"
+          @click="toggleFilter('country')">
+          Страна
+          <div v-if="activeFilters.includes('country')">
             <Icon name="ChevronDown" :size="20" class="chevron" />
           </div>
           <div v-else>
@@ -58,16 +81,18 @@
           </div>
         </div>
 
-        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('purpose') }"
-          @click="toggleFilter('purpose')">
-          Назначение
-          <div v-if="activeFilters.includes('purpose')">
-            <Icon name="ChevronDown" :size="20" class="chevron" />
-          </div>
-          <div v-else>
-            <Icon name="ChevronRight" :size="20" class="chevron" />
+        <div v-if="activeFilters.includes('country')">
+          <div class="category_filter">
+            <label class="category_filter__label">Выберите страну</label>
+            <select v-model="selectedCountry">
+              <option :value="null">Все страны</option>
+              <option v-for="country in countries" :key="country.id" :value="country.id">
+                {{ country.name }}
+              </option>
+            </select>
           </div>
         </div>
+
         <div class="filter__end" :class="{ 'filter__end--active': activeFilters.includes('color') }"
           @click="toggleFilter('color')">
           Цвет
@@ -79,7 +104,17 @@
           </div>
         </div>
 
-
+        <div v-if="activeFilters.includes('color')">
+          <div class="category_filter">
+            <label class="category_filter__label">Выберите цвет</label>
+            <select v-model="selectedColor">
+              <option :value="null">Все цвета</option>
+              <option v-for="color in colors" :key="color.id" :value="color.id">
+                {{ color.name }}
+              </option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
     <div class="home">
@@ -148,6 +183,22 @@ interface Product {
   images: ProductImage[]
 }
 
+interface Material {
+  id: number
+  name: string
+}
+
+interface Color {
+  id: number
+  name: string
+  code: string | null
+}
+
+interface Country {
+  id: number
+  name: string
+}
+
 interface Category {
   id: number
   name: string
@@ -156,6 +207,7 @@ interface Category {
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 const products = ref<Product[]>([])
+const materials = ref<Material[]>([])
 const loading = ref(true)
 const error = ref('')
 const activeFilters = ref<string[]>([])
@@ -163,8 +215,13 @@ const activeFilters = ref<string[]>([])
 const minPrice = ref('')
 const selectedCategory = ref<number | null>(null)
 const maxPrice = ref('')
+const selectedMaterial = ref<number | null>(null)
+const selectedColor = ref<number | null>(null)
+const selectedCountry = ref<number | null>(null)
 
 const categories = ref<Category[]>([])
+const colors = ref<Color[]>([])
+const countries = ref<Country[]>([])
 
 const { addToCart } = useCart()
 
@@ -179,12 +236,40 @@ const displayedProducts = computed(() => {
   return products.value;
 });
 
+// Функции для фильров (available обрабатывается на бэке)
 async function getCategories() {
   const response = await fetch(`${API_BASE_URL}/categories/available`)
 
   if (response.ok) {
     const data = await response.json()
     categories.value = data
+  }
+}
+
+async function getMaterials() {
+  const response = await fetch(`${API_BASE_URL}/materials/available`)
+
+  if (response.ok) {
+    const data = await response.json()
+    materials.value = data
+  }
+}
+
+async function getColors() {
+  const response = await fetch(`${API_BASE_URL}/colors/available`)
+
+  if (response.ok) {
+    const data = await response.json()
+    colors.value = data
+  }
+}
+
+async function getCountries() {
+  const response = await fetch(`${API_BASE_URL}/countries/available`)
+
+  if (response.ok) {
+    const data = await response.json()
+    countries.value = data
   }
 }
 
@@ -197,10 +282,22 @@ async function loadProducts() {
     if (activeFilters.value.includes('price')) {
       const min = parseFloat(minPrice.value);
       const max = parseFloat(maxPrice.value);
-      
+
       // NaN - Not a Number
       if (!Number.isNaN(min)) params.set('min_price', String(min))
       if (!Number.isNaN(max)) params.set('max_price', String(max))
+    }
+
+    if (activeFilters.value.includes('material') && selectedMaterial.value) {
+      params.set('material', String(selectedMaterial.value))
+    }
+
+    if (activeFilters.value.includes('color') && selectedColor.value) {
+      params.set('color', String(selectedColor.value))
+    }
+
+    if (activeFilters.value.includes('country') && selectedCountry.value) {
+      params.set('country', String(selectedCountry.value))
     }
 
     const url = `${API_BASE_URL}/products${params.toString() ? `/?${params.toString()}` : ''}`
@@ -238,6 +335,33 @@ watch(
 )
 
 watch(
+  selectedMaterial,
+  () => {
+    if (activeFilters.value.includes('material')) {
+      loadProducts()
+    }
+  },
+)
+
+watch(
+  selectedColor,
+  () => {
+    if (activeFilters.value.includes('color')) {
+      loadProducts()
+    }
+  },
+)
+
+watch(
+  selectedCountry,
+  () => {
+    if (activeFilters.value.includes('country')) {
+      loadProducts()
+    }
+  },
+)
+
+watch(
   activeFilters,
   () => {
     if (activeFilters.value.includes('price')) {
@@ -247,7 +371,7 @@ watch(
 )
 
 watch(
-  activeFilters, 
+  activeFilters,
   () => {
     if (activeFilters.value.includes('category')) {
       loadProducts()
@@ -266,9 +390,11 @@ function toggleFilter(filter: string) {
   }
 }
 
-
 onMounted(() => {
   getCategories()
+  getMaterials()
+  getColors()
+  getCountries()
   loadProducts()
 })
 </script>
@@ -495,8 +621,8 @@ onMounted(() => {
   background: white;
   cursor: pointer;
   transition: all 0.1s ease;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  /* border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -582,7 +708,7 @@ onMounted(() => {
   .home {
     padding-left: 20px;
   }
-  
+
   .home__products {
     grid-template-columns: repeat(1, 230px);
     justify-content: center;
