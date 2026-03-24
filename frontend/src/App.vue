@@ -51,7 +51,6 @@
           <div class="bottom__links">
             <a href="https://www.ozon.ru/seller/alliance-3804007/?miniapp=seller_3804007">OZON</a>
             <a href="">Доставка и оплата</a>
-            <a href="">Каталог товаров</a>
           </div>
         </div>
         <div class="bottom__additional" aria-label="Дополнительная информация">

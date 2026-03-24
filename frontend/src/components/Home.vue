@@ -129,8 +129,8 @@
       </div>
 
       <div v-else class="home__products">
-        <div v-for="product in displayedProducts" :key="product.id" class="home__product">
-
+        <div v-for="product in displayedProducts" :key="product.id" class="home__product"
+          @click="openProductModal(product)">
           <!-- Показываем изображение если есть, иначе пропускаем -->
           <div class="product__image">
             <img v-if="product.images && product.images.length > 0" :src="`${API_BASE_URL}${product.images[0]?.url}`"
@@ -143,12 +143,14 @@
               <p class="product__price">{{ product.price }} ₽</p>
               <p class="product__priceUnit">за шт.</p>
             </div>
-            <button class="product__cartBtn" type="button" @click="addToCart(product)">
+            <button class="product__cartBtn" type="button" @click.stop="handleAddToCart(product)">
               <Icon name="ShoppingCart" :size="20" className="product__cartIcon" />
             </button>
           </div>
         </div>
       </div>
+
+      <ProductModal v-model="isModalOpen" :product="selectedProduct" />
     </div>
   </div>
 </template>
@@ -158,30 +160,8 @@
 import { ref, onMounted, inject, computed, watch, type Ref } from 'vue'
 import { useCart } from '../composables/useCart'
 import Icon from './Icon.vue'
-
-interface ProductImage {
-  id: number;
-  product_id: number;
-  url: string;
-}
-
-interface Product {
-  id: number
-  name: string
-  price: number
-  description: string | null
-  category_id: number | null
-  pack_quantity: number | null
-  quantity: number | null
-  weight: string | null
-  color_id: number | null
-  material_id: number | null
-  country_id: number | null
-  purpose: string | null
-  created_at: string | null
-  updated_at: string | null
-  images: ProductImage[]
-}
+import ProductModal from './products/ProductModal.vue'
+import type { Product } from '../types/product'
 
 interface Material {
   id: number
@@ -224,6 +204,31 @@ const colors = ref<Color[]>([])
 const countries = ref<Country[]>([])
 
 const { addToCart } = useCart()
+
+// Состояние для модального окна
+const selectedProduct = ref<Product | undefined>(undefined)
+const isModalOpen = ref(false)
+
+// Функция для открытия модала
+const openProductModal = (product: Product) => {
+  selectedProduct.value = product
+  isModalOpen.value = true
+}
+
+function handleAddToCart(product: Product) {
+  if (typeof product.price !== 'number') {
+    return
+  }
+
+  addToCart({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    images: product.images
+      .filter((image): image is Product['images'][number] & { url: string } => typeof image.url === 'string')
+      .map((image) => ({ url: image.url })),
+  })
+}
 
 // Получаем результаты поиска из App.vue через inject
 const searchResults = inject<Ref<Product[]>>('searchResults');
@@ -456,6 +461,7 @@ onMounted(() => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .home__product:hover {
@@ -523,7 +529,8 @@ onMounted(() => {
 }
 
 .product__cartBtn:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
+  background: #e5e7eb;
 }
 
 .product__cartIcon {
@@ -610,6 +617,7 @@ onMounted(() => {
 
 .filter__option--active {
   background: #EFEFEF;
+  position: relative;
 }
 
 .filter__end {
@@ -634,6 +642,19 @@ onMounted(() => {
 
 .filter__end--active {
   background: #EFEFEF;
+  position: relative;
+}
+
+.filter__option--active::before,
+.filter__end--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  width: 3px;
+  height: 50%;
+  background: #1e1e1e;
+  border-radius: 999px;
 }
 
 .category_filter {

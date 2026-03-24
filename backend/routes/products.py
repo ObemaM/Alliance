@@ -1,14 +1,32 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from database import get_db
 from models.product import Product
-from schemas.product import ProductResponse, ProductCreate, ProductUpdate
+from models.product_attribute import ProductAttribute
+from schemas.product import ProductCreate, ProductResponse, ProductUpdate
 
 
 router = APIRouter(prefix="/products", tags=["Products"])
+
+PRODUCT_LOAD_OPTIONS = (
+    selectinload(Product.product_images),
+    selectinload(Product.category),
+    selectinload(Product.color),
+    selectinload(Product.material),
+    selectinload(Product.country),
+    selectinload(Product.product_attributes).selectinload(ProductAttribute.attribute),
+)
+
+def build_product_query():
+    return select(Product).options(*PRODUCT_LOAD_OPTIONS)
+
+async def get_product_with_relations(product_id: int, db: AsyncSession):
+    query = build_product_query().where(Product.id == product_id)
+    result = await db.execute(query)
+    return result.scalar_one_or_none()
 
 @router.get("/", response_model=list[ProductResponse])
 async def get_all_products(
@@ -22,16 +40,13 @@ async def get_all_products(
     country: int | None = None,
     db: AsyncSession = Depends(get_db),
 ):
-
-    # Можно сказать, что selectinload - это просто where product_id == текущему продукту
-    query = select(Product).options(selectinload(Product.product_images))
+    query = build_product_query()
 
     search = q or name
 
     if search:
         query = query.where(
-            (Product.name.ilike(f"%{search}%") |
-            Product.description.ilike(f"%{search}%"))
+            (Product.name.ilike(f"%{search}%") | Product.description.ilike(f"%{search}%"))
         )
 
     if category:
@@ -51,10 +66,10 @@ async def get_all_products(
 
     if max_price is not None:
         query = query.where(Product.price <= max_price)
-    
+
     result = await db.execute(query)
-    products = result.scalars().all()
-    return products
+    return result.scalars().all()
+
 
 @router.post("/", response_model=ProductResponse)
 async def create_product(product: ProductCreate, db: AsyncSession = Depends(get_db)):
@@ -69,11 +84,18 @@ async def create_product(product: ProductCreate, db: AsyncSession = Depends(get_
         color_id=product.color_id,
         material_id=product.material_id,
         country_id=product.country_id,
+        purpose=product.purpose,
     )
     db.add(new_product)
     await db.commit()
     await db.refresh(new_product)
-    return new_product
+
+    product_with_relations = await get_product_with_relations(new_product.id, db)
+    if product_with_relations is None:
+        raise HTTPException(status_code=404, detail="Товар не найден")
+
+    return product_with_relations
+
 
 @router.patch("/{product_id}", response_model=ProductResponse)
 async def update_product(
@@ -108,10 +130,17 @@ async def update_product(
         db_product.material_id = product.material_id
     if product.country_id is not None:
         db_product.country_id = product.country_id
+    if product.purpose is not None:
+        db_product.purpose = product.purpose
 
     await db.commit()
-    await db.refresh(db_product)
-    return db_product
+
+    product_with_relations = await get_product_with_relations(product_id, db)
+    if product_with_relations is None:
+        raise HTTPException(status_code=404, detail="Товар не найден")
+
+    return product_with_relations
+
 
 @router.delete("/{product_id}")
 async def delete_product(product_id: int, db: AsyncSession = Depends(get_db)):

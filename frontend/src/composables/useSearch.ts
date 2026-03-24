@@ -1,12 +1,6 @@
 import { ref, watch, type Ref } from 'vue';
 
-interface Product {
-    id: number;
-    name: string;
-    description?: string;
-    price: number;
-    images?: { url: string }[];
-}
+import type { Product } from '../types/product'
 
 function debounce<T extends (...args: any[]) => any>(
     func: T,

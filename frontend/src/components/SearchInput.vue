@@ -21,7 +21,7 @@ interface Props {
 }
 
 // Макрос - это код, который обрабатывается до выполнения программы и заменяется на другой код.
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   placeholder: 'Поиск товаров...'
 })
 
