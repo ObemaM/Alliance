@@ -10,9 +10,20 @@
 
     <header>
       <div class="header__container">
-        <div class="header__name">
-          <img :src="logo" alt="Лого" class="header__logo" />
-          <h1>ALLIANCE</h1>
+        <div class="header__left">
+          <router-link to="/" class="header__name" aria-label="Перейти на главную">
+            <img :src="logo" alt="Лого" class="header__logo" />
+            <h1>ALLIANCE</h1>
+          </router-link>
+          <router-link
+            v-if="showCatalogReturnButton"
+            to="/"
+            class="header__back-link"
+            aria-label="Вернуться в каталог"
+          >
+            <Icon name="ArrowLeft" :size="16" className="header__back-icon" />
+            <span>Товары</span>
+          </router-link>
         </div>
         <SearchInput v-model="searchTerm" placeholder="Поиск товаров..." class="header__search"/>
 
@@ -29,14 +40,14 @@
     </main>
 
     <footer class="bottom">
-      <div class="bottom__container">
-        <div class="bottom__brand">
+      <div class="bottom__info">
+        <div class="bottom__brand" aria-label="О компании">
           <div class="bottom__headers">
-            <h2>ALLIANCE</h2> 
+            <h2>ALLIANCE</h2>
           </div>
-          <p class="alliance__text">Ваш надежный партнер в строительстве и ремонте.</p>
+          <p class="alliance__text">Крепеж и строительные материалы. Доставка по Санкт-Петербургу и Ленинградской области.</p>
         </div>
-        <div class="bottom__contacts">
+        <div class="bottom__contacts" aria-label="Контакты">
           <div class="bottom__headers">
             <h3>Контакты</h3>
           </div>
@@ -44,17 +55,23 @@
             <br>
             Город: {{address }}</p>
         </div>
-        <div class="bottom_information" aria-label="Навигация по футеру">
+        <div class="bottom__information" aria-label="Навигация по футеру">
           <div class="bottom__headers">
             <h4>Информация</h4>
           </div>
           <div class="bottom__links">
             <a href="https://www.ozon.ru/seller/alliance-3804007/?miniapp=seller_3804007">OZON</a>
-            <br>
-            <a href="">Доставка и оплата</a>
+            <router-link to="/delivery">Доставка и оплата</router-link>
           </div>
         </div>
-        <img :src="`${API_BASE_URL}/uploads/images/icon.svg`" alt="" class="bottom__icon" />
+        <div class="bottom__additional" aria-label="Дополнительная информация">
+          <div class="bottom__headers">
+            <h4>Дополнительно</h4>
+          </div>
+          <div class="bottom__links">
+            <router-link to="/about">О компании</router-link>
+          </div>
+        </div>
       </div>
       <div class="bottom__copyright">
         <small> 2026 ALLIANCE</small>
@@ -72,13 +89,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Icon from './components/Icon.vue';
 import SearchInput from './components/SearchInput.vue';
 import { useCart } from './composables/useCart'
 import CartDrawer from './components/CartDrawer.vue';
 import { useSearch } from './composables/useSearch';
 import { provide } from 'vue';
+import { useRoute } from 'vue-router';
  
 
 type SiteContentItem = {
@@ -88,7 +106,7 @@ type SiteContentItem = {
   description: string | null;
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Реактивные переменные, нужны для обновления данных при загрузке
 const phone = ref('');
@@ -97,6 +115,9 @@ const logo = ref('');
 const searchTerm = ref ('')
 const { searchResults } = useSearch(searchTerm)
 const isCartOpen = ref(false);
+const route = useRoute();
+const infoPagePaths = new Set(['/about', '/delivery']);
+const showCatalogReturnButton = computed(() => infoPagePaths.has(route.path));
 
 provide('searchResults', searchResults)
 
@@ -237,6 +258,14 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    text-decoration: none;
+  }
+
+  .header__left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
   }
  
   .header__logo{
@@ -293,98 +322,129 @@ onMounted(() => {
     background-color: #f5f6f7;
     border-radius: 1px
   }
+
+  .header__back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 10px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .header__back-link:hover {
+    background-color: #111111;
+    transform: translateY(-1px);
+  }
+
+  .header__back-icon {
+    color: #ffffff;
+    flex-shrink: 0;
+  }
   
   .bottom{
     margin-top: auto;
     width: 100%;
-    min-height: 250px;
-    bottom: auto;
+    min-height: 280px;
     background-color: #1e1e1e;
+    padding: 48px 0 24px;
   }
   
   .bottom__container{
-    /* отступ сверху */
-    padding-top: 20px;
-    
-    padding-left: 20px;
-    padding-right: 20px;
-    
-    /* классический способ центрирования блочного элемента */
-    margin: 0 auto;
-    
-    display: flex;
-    align-items: center;
     max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   
   .bottom__brand {
-    min-height: 160px;
-    margin-right: 50px;
+    width: fit-content;
+    min-width: 200px;
   }
 
   .bottom__contacts {
-    min-height: 160px;
-    margin-right: 50px;
+    width: fit-content;
+    min-width: 200px;
+  }
+
+  .bottom__additional {
+    width: fit-content;
+    min-width: 200px;
+  }
+
+  .bottom__information {
+    width: fit-content;
+    min-width: 150px;
   }
   
-  .bottom_information {
-    min-height: 160px;
-  }
-  
-  .bottom__copyright small {
-    padding-top: 20px;
+  .bottom__copyright {
+    margin-top: 32px;
+    padding-top: 24px;
     border-top: 1px solid #374151;
     display: flex;
-    margin: 0 auto;
-    color: #9ca3af;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .bottom__copyright small {
+    color: #9ca3af;
     font-size: 12px;
   }
 
   .bottom__info {
     display: flex;
     justify-content: space-between;
-    margin: 0 auto;
+    gap: 40px;
     max-width: 1100px;
-    gap: 20px;
+    margin: 0 auto;
   }
   
   .alliance__text {
-    margin-top: 15px;
-    max-width: 385px;
-    font-size: 15px;
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.6;
     color: #9ca3af;
   }
 
   .bottom__headers {
-    min-height: 40px;
-    display: flex;
-    align-items: center;
+    margin-bottom: 8px;
   }
   
-  .bottom__headers h3 {
-    margin: 0;
-  }
-  
+  .bottom__headers h2,
+  .bottom__headers h3,
   .bottom__headers h4 {
     margin: 0;
-  }
-  
-  .bottom__headers h2 {
-    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #f9fafb;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .bottom__links {
-    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .bottom__links a {
     color: #9ca3af;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    line-height: 1.5;
   }
 
   .bottom__links a:hover {
-    text-decoration: underline;
     color: #ffffff;
   }
 
@@ -443,6 +503,11 @@ onMounted(() => {
 
     .header__container {
       flex-wrap: wrap;
+    }
+
+    .header__left {
+      width: 100%;
+      justify-content: space-between;
     }
     
     .header__search{

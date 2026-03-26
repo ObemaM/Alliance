@@ -22,7 +22,6 @@ class CategoryCreate(BaseModel):
     slug: str
     parent_id: int | None = None
 
-
 # Редактирование - в update все поля не обязательны
 class CategoryUpdate(BaseModel):
     name: str | None = None

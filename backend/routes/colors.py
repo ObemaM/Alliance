@@ -4,9 +4,19 @@ from sqlalchemy import select
 
 from database import get_db
 from models.color import Color
+from models.product import Product
 from schemas.color import ColorResponse, ColorCreate, ColorUpdate
 
 router = APIRouter(prefix="/colors", tags=["Colors"])
+
+@router.get("/available", response_model=list[ColorResponse])
+async def get_available_colors(db: AsyncSession = Depends(get_db)):
+    query = select(Color).join(Product, Color.id == Product.color_id).distinct()
+
+    result = await db.execute(query)
+    colors = result.scalars().all()
+
+    return colors
 
 @router.get("/", response_model=list[ColorResponse])
 async def get_all_colors(db: AsyncSession = Depends(get_db)):

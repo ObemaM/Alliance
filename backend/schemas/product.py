@@ -2,6 +2,11 @@ from datetime import datetime
 from typing import List
 
 from pydantic import BaseModel
+from schemas.category import CategoryNameResponse
+from schemas.color import ColorResponse
+from schemas.country import CountryResponse
+from schemas.material import MaterialResponse
+from schemas.product_attribute import ProductAttributeResponse
 from schemas.product_image import ProductImageResponse
 
 class ProductResponse(BaseModel):
@@ -19,6 +24,11 @@ class ProductResponse(BaseModel):
     purpose: str | None
     created_at: datetime | None
     updated_at: datetime | None
+    category: CategoryNameResponse | None = None
+    color: ColorResponse | None = None
+    material: MaterialResponse | None = None
+    country: CountryResponse | None = None
+    product_attributes: List[ProductAttributeResponse] = []
     images: List[ProductImageResponse] = []
 
     class Config:

@@ -26,6 +26,29 @@
           </div>
         </div>
 
+        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('material') }"
+          @click="toggleFilter('material')">
+          Материал
+          <div v-if="activeFilters.includes('material')">
+            <Icon name="ChevronDown" :size="20" class="chevron" />
+          </div>
+          <div v-else>
+            <Icon name="ChevronRight" :size="20" class="chevron" />
+          </div>
+        </div>
+
+        <div v-if="activeFilters.includes('material')">
+          <div class="category_filter">
+            <label class="category_filter__label">Выберите материал</label>
+            <select v-model="selectedMaterial">
+              <option :value="null">Все материалы</option>
+              <option v-for="material in materials" :key="material.id" :value="material.id">
+                {{ material.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
         <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('price') }"
           @click="toggleFilter('price')">
           Цена
@@ -47,10 +70,10 @@
           </div>
         </div>
 
-        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('material') }"
-          @click="toggleFilter('material')">
-          Материал
-          <div v-if="activeFilters.includes('material')">
+        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('country') }"
+          @click="toggleFilter('country')">
+          Страна
+          <div v-if="activeFilters.includes('country')">
             <Icon name="ChevronDown" :size="20" class="chevron" />
           </div>
           <div v-else>
@@ -58,16 +81,18 @@
           </div>
         </div>
 
-        <div class="filter__option" :class="{ 'filter__option--active': activeFilters.includes('purpose') }"
-          @click="toggleFilter('purpose')">
-          Назначение
-          <div v-if="activeFilters.includes('purpose')">
-            <Icon name="ChevronDown" :size="20" class="chevron" />
-          </div>
-          <div v-else>
-            <Icon name="ChevronRight" :size="20" class="chevron" />
+        <div v-if="activeFilters.includes('country')">
+          <div class="category_filter">
+            <label class="category_filter__label">Выберите страну</label>
+            <select v-model="selectedCountry">
+              <option :value="null">Все страны</option>
+              <option v-for="country in countries" :key="country.id" :value="country.id">
+                {{ country.name }}
+              </option>
+            </select>
           </div>
         </div>
+
         <div class="filter__end" :class="{ 'filter__end--active': activeFilters.includes('color') }"
           @click="toggleFilter('color')">
           Цвет
@@ -79,7 +104,17 @@
           </div>
         </div>
 
-
+        <div v-if="activeFilters.includes('color')">
+          <div class="category_filter">
+            <label class="category_filter__label">Выберите цвет</label>
+            <select v-model="selectedColor">
+              <option :value="null">Все цвета</option>
+              <option v-for="color in colors" :key="color.id" :value="color.id">
+                {{ color.name }}
+              </option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
     <div class="home">
@@ -94,8 +129,8 @@
       </div>
 
       <div v-else class="home__products">
-        <div v-for="product in displayedProducts" :key="product.id" class="home__product">
-
+        <div v-for="product in displayedProducts" :key="product.id" class="home__product"
+          @click="openProductModal(product)">
           <!-- Показываем изображение если есть, иначе пропускаем -->
           <div class="product__image">
             <img v-if="product.images && product.images.length > 0" :src="`${API_BASE_URL}${product.images[0]?.url}`"
@@ -108,12 +143,14 @@
               <p class="product__price">{{ product.price }} ₽</p>
               <p class="product__priceUnit">за шт.</p>
             </div>
-            <button class="product__cartBtn" type="button" @click="addToCart(product)">
+            <button class="product__cartBtn" type="button" @click.stop="handleAddToCart(product)">
               <Icon name="ShoppingCart" :size="20" className="product__cartIcon" />
             </button>
           </div>
         </div>
       </div>
+
+      <ProductModal v-model="isModalOpen" :product="selectedProduct" />
     </div>
   </div>
 </template>
@@ -123,29 +160,23 @@
 import { ref, onMounted, inject, computed, watch, type Ref } from 'vue'
 import { useCart } from '../composables/useCart'
 import Icon from './Icon.vue'
+import ProductModal from './products/ProductModal.vue'
+import type { Product } from '../types/product'
 
-interface ProductImage {
-  id: number;
-  product_id: number;
-  url: string;
-}
-
-interface Product {
+interface Material {
   id: number
   name: string
-  price: number
-  description: string | null
-  category_id: number | null
-  pack_quantity: number | null
-  quantity: number | null
-  weight: string | null
-  color_id: number | null
-  material_id: number | null
-  country_id: number | null
-  purpose: string | null
-  created_at: string | null
-  updated_at: string | null
-  images: ProductImage[]
+}
+
+interface Color {
+  id: number
+  name: string
+  code: string | null
+}
+
+interface Country {
+  id: number
+  name: string
 }
 
 interface Category {
@@ -153,9 +184,10 @@ interface Category {
   name: string
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const products = ref<Product[]>([])
+const materials = ref<Material[]>([])
 const loading = ref(true)
 const error = ref('')
 const activeFilters = ref<string[]>([])
@@ -163,10 +195,40 @@ const activeFilters = ref<string[]>([])
 const minPrice = ref('')
 const selectedCategory = ref<number | null>(null)
 const maxPrice = ref('')
+const selectedMaterial = ref<number | null>(null)
+const selectedColor = ref<number | null>(null)
+const selectedCountry = ref<number | null>(null)
 
 const categories = ref<Category[]>([])
+const colors = ref<Color[]>([])
+const countries = ref<Country[]>([])
 
 const { addToCart } = useCart()
+
+// Состояние для модального окна
+const selectedProduct = ref<Product | undefined>(undefined)
+const isModalOpen = ref(false)
+
+// Функция для открытия модала
+const openProductModal = (product: Product) => {
+  selectedProduct.value = product
+  isModalOpen.value = true
+}
+
+function handleAddToCart(product: Product) {
+  if (typeof product.price !== 'number') {
+    return
+  }
+
+  addToCart({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    images: product.images
+      .filter((image): image is Product['images'][number] & { url: string } => typeof image.url === 'string')
+      .map((image) => ({ url: image.url })),
+  })
+}
 
 // Получаем результаты поиска из App.vue через inject
 const searchResults = inject<Ref<Product[]>>('searchResults');
@@ -179,12 +241,40 @@ const displayedProducts = computed(() => {
   return products.value;
 });
 
+// Функции для фильров (available обрабатывается на бэке)
 async function getCategories() {
   const response = await fetch(`${API_BASE_URL}/categories/available`)
 
   if (response.ok) {
     const data = await response.json()
     categories.value = data
+  }
+}
+
+async function getMaterials() {
+  const response = await fetch(`${API_BASE_URL}/materials/available`)
+
+  if (response.ok) {
+    const data = await response.json()
+    materials.value = data
+  }
+}
+
+async function getColors() {
+  const response = await fetch(`${API_BASE_URL}/colors/available`)
+
+  if (response.ok) {
+    const data = await response.json()
+    colors.value = data
+  }
+}
+
+async function getCountries() {
+  const response = await fetch(`${API_BASE_URL}/countries/available`)
+
+  if (response.ok) {
+    const data = await response.json()
+    countries.value = data
   }
 }
 
@@ -197,13 +287,25 @@ async function loadProducts() {
     if (activeFilters.value.includes('price')) {
       const min = parseFloat(minPrice.value);
       const max = parseFloat(maxPrice.value);
-      
+
       // NaN - Not a Number
       if (!Number.isNaN(min)) params.set('min_price', String(min))
       if (!Number.isNaN(max)) params.set('max_price', String(max))
     }
 
-    const url = `${API_BASE_URL}/products${params.toString() ? `/?${params.toString()}` : ''}`
+    if (activeFilters.value.includes('material') && selectedMaterial.value) {
+      params.set('material', String(selectedMaterial.value))
+    }
+
+    if (activeFilters.value.includes('color') && selectedColor.value) {
+      params.set('color', String(selectedColor.value))
+    }
+
+    if (activeFilters.value.includes('country') && selectedCountry.value) {
+      params.set('country', String(selectedCountry.value))
+    }
+
+    const url = `${API_BASE_URL}/products/${params.toString() ? `?${params.toString()}` : ''}`
     const response = await fetch(url)
 
     if (!response.ok) {
@@ -238,6 +340,33 @@ watch(
 )
 
 watch(
+  selectedMaterial,
+  () => {
+    if (activeFilters.value.includes('material')) {
+      loadProducts()
+    }
+  },
+)
+
+watch(
+  selectedColor,
+  () => {
+    if (activeFilters.value.includes('color')) {
+      loadProducts()
+    }
+  },
+)
+
+watch(
+  selectedCountry,
+  () => {
+    if (activeFilters.value.includes('country')) {
+      loadProducts()
+    }
+  },
+)
+
+watch(
   activeFilters,
   () => {
     if (activeFilters.value.includes('price')) {
@@ -247,7 +376,7 @@ watch(
 )
 
 watch(
-  activeFilters, 
+  activeFilters,
   () => {
     if (activeFilters.value.includes('category')) {
       loadProducts()
@@ -266,9 +395,11 @@ function toggleFilter(filter: string) {
   }
 }
 
-
 onMounted(() => {
   getCategories()
+  getMaterials()
+  getColors()
+  getCountries()
   loadProducts()
 })
 </script>
@@ -330,6 +461,7 @@ onMounted(() => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .home__product:hover {
@@ -397,7 +529,8 @@ onMounted(() => {
 }
 
 .product__cartBtn:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
+  background: #e5e7eb;
 }
 
 .product__cartIcon {
@@ -484,6 +617,7 @@ onMounted(() => {
 
 .filter__option--active {
   background: #EFEFEF;
+  position: relative;
 }
 
 .filter__end {
@@ -495,8 +629,8 @@ onMounted(() => {
   background: white;
   cursor: pointer;
   transition: all 0.1s ease;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  /* border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -508,6 +642,19 @@ onMounted(() => {
 
 .filter__end--active {
   background: #EFEFEF;
+  position: relative;
+}
+
+.filter__option--active::before,
+.filter__end--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  width: 3px;
+  height: 50%;
+  background: #1e1e1e;
+  border-radius: 999px;
 }
 
 .category_filter {
@@ -582,7 +729,7 @@ onMounted(() => {
   .home {
     padding-left: 20px;
   }
-  
+
   .home__products {
     grid-template-columns: repeat(1, 230px);
     justify-content: center;

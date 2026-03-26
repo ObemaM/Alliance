@@ -4,10 +4,20 @@ from sqlalchemy import select
 
 from database import get_db
 from models.country import Country
+from models.product import Product
 from schemas.country import CountryResponse, CountryCreate, CountryUpdate
 
 # URL будут начинаться с /countries и будут относиться тегу (в документации) Countries
 router = APIRouter(prefix="/countries", tags=["Countries"])
+
+@router.get("/available", response_model=list[CountryResponse])
+async def get_available_countries(db: AsyncSession = Depends(get_db)):
+    query = select(Country).join(Product, Country.id == Product.country_id).distinct()
+
+    result = await db.execute(query)
+    countries = result.scalars().all()
+
+    return countries
 
 # Список элементов CountryResponse - list[CountryResponse]
 # Выбираем по какому эндпоинту надо обращаться

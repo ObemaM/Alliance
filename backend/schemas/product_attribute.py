@@ -1,10 +1,13 @@
 from pydantic import BaseModel
 
+from schemas.attribute import AttributeResponse
+
 
 class ProductAttributeResponse(BaseModel):
     product_id: int
     attribute_id: int
     value_text: str | None
+    attribute: AttributeResponse | None = None
 
     class Config:
         from_attributes = True

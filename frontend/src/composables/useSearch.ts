@@ -1,12 +1,6 @@
 import { ref, watch, type Ref } from 'vue';
 
-interface Product {
-    id: number;
-    name: string;
-    description?: string;
-    price: number;
-    images?: { url: string }[];
-}
+import type { Product } from '../types/product'
 
 function debounce<T extends (...args: any[]) => any>(
     func: T,
@@ -32,7 +26,7 @@ export function useSearch(searchTerm: Ref<string>) {
         isLoading.value = true;
 
         try {
-            const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+            const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
             const response = await fetch(`${API_BASE_URL}/products/?q=${query}`);
 
             if (!response.ok) throw new Error('Ошибка поиска');

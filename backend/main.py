@@ -1,7 +1,11 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
+from database import Base, engine
+import models
 from routes import countries_router
 from routes import colors_router
 from routes import categories_router
@@ -14,9 +18,17 @@ from fastapi.staticfiles import StaticFiles
 # ./venv/Scripts/activate
 
 # Запуск - uvicorn main:app --reload
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
+    yield
+
 app = FastAPI(
     title=settings.app_name,
     debug=settings.debug,
+    lifespan=lifespan,
+    redirect_slashes=False,
 )
 
 # Настройка CORS (разрешаем запросы с фронтенда)
