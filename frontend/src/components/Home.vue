@@ -184,7 +184,7 @@ interface Category {
   name: string
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const products = ref<Product[]>([])
 const materials = ref<Material[]>([])
@@ -305,7 +305,7 @@ async function loadProducts() {
       params.set('country', String(selectedCountry.value))
     }
 
-    const url = `${API_BASE_URL}/products${params.toString() ? `/?${params.toString()}` : ''}`
+    const url = `${API_BASE_URL}/products/${params.toString() ? `?${params.toString()}` : ''}`
     const response = await fetch(url)
 
     if (!response.ok) {

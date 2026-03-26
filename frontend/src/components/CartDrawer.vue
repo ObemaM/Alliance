@@ -110,7 +110,7 @@ const emit = defineEmits<Emits>();
 
 const showClearCartButton = ref(false);
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const total = computed(() => {
   return props.items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);

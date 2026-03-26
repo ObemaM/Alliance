@@ -10,9 +10,20 @@
 
     <header>
       <div class="header__container">
-        <div class="header__name">
-          <img :src="logo" alt="Лого" class="header__logo" />
-          <h1>ALLIANCE</h1>
+        <div class="header__left">
+          <router-link to="/" class="header__name" aria-label="Перейти на главную">
+            <img :src="logo" alt="Лого" class="header__logo" />
+            <h1>ALLIANCE</h1>
+          </router-link>
+          <router-link
+            v-if="showCatalogReturnButton"
+            to="/"
+            class="header__back-link"
+            aria-label="Вернуться в каталог"
+          >
+            <Icon name="ArrowLeft" :size="16" className="header__back-icon" />
+            <span>Товары</span>
+          </router-link>
         </div>
         <SearchInput v-model="searchTerm" placeholder="Поиск товаров..." class="header__search"/>
 
@@ -50,7 +61,7 @@
           </div>
           <div class="bottom__links">
             <a href="https://www.ozon.ru/seller/alliance-3804007/?miniapp=seller_3804007">OZON</a>
-            <a href="">Доставка и оплата</a>
+            <router-link to="/delivery">Доставка и оплата</router-link>
           </div>
         </div>
         <div class="bottom__additional" aria-label="Дополнительная информация">
@@ -58,7 +69,7 @@
             <h4>Дополнительно</h4>
           </div>
           <div class="bottom__links">
-            <a href="">О компании</a>
+            <router-link to="/about">О компании</router-link>
           </div>
         </div>
       </div>
@@ -78,13 +89,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Icon from './components/Icon.vue';
 import SearchInput from './components/SearchInput.vue';
 import { useCart } from './composables/useCart'
 import CartDrawer from './components/CartDrawer.vue';
 import { useSearch } from './composables/useSearch';
 import { provide } from 'vue';
+import { useRoute } from 'vue-router';
  
 
 type SiteContentItem = {
@@ -94,7 +106,7 @@ type SiteContentItem = {
   description: string | null;
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Реактивные переменные, нужны для обновления данных при загрузке
 const phone = ref('');
@@ -103,6 +115,9 @@ const logo = ref('');
 const searchTerm = ref ('')
 const { searchResults } = useSearch(searchTerm)
 const isCartOpen = ref(false);
+const route = useRoute();
+const infoPagePaths = new Set(['/about', '/delivery']);
+const showCatalogReturnButton = computed(() => infoPagePaths.has(route.path));
 
 provide('searchResults', searchResults)
 
@@ -243,6 +258,14 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    text-decoration: none;
+  }
+
+  .header__left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
   }
  
   .header__logo{
@@ -298,6 +321,32 @@ onMounted(() => {
   .header__search {
     background-color: #f5f6f7;
     border-radius: 1px
+  }
+
+  .header__back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 10px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .header__back-link:hover {
+    background-color: #111111;
+    transform: translateY(-1px);
+  }
+
+  .header__back-icon {
+    color: #ffffff;
+    flex-shrink: 0;
   }
   
   .bottom{
@@ -454,6 +503,11 @@ onMounted(() => {
 
     .header__container {
       flex-wrap: wrap;
+    }
+
+    .header__left {
+      width: 100%;
+      justify-content: space-between;
     }
     
     .header__search{

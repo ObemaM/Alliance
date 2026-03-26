@@ -1,30 +1,77 @@
-# docker-compose up --build -d
 services:
   db:
     image: postgres:16
     container_name: alliance-db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
     volumes:
       - pgdata:/var/lib/postgresql/data
+    ports:
+      - "${DB_EXTERNAL_PORT:-5435}:5432"
+    expose:
+      - "5432"
     networks:
       - alliance-net
-    ports:
-      - "${DB_PORT}:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
-  # backend:
-  # frontend:
-  # nginx:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: alliance-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "8000"
+    volumes:
+      - backend_uploads:/app/backend/uploads
+    networks:
+      - alliance-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: /api
+    container_name: alliance-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    networks:
+      - alliance-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   
 networks:
   alliance-net:
 
 volumes:
   pgdata:
+  backend_uploads:
 

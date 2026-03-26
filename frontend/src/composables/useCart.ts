@@ -20,7 +20,13 @@ function loadCart() {
   const savedCart = localStorage.getItem('cart');
 
   if (savedCart) {
-    cart.value = JSON.parse(savedCart);
+    try {
+      const parsedCart = JSON.parse(savedCart);
+      cart.value = Array.isArray(parsedCart) ? parsedCart : [];
+    } catch {
+      cart.value = [];
+      localStorage.removeItem('cart');
+    }
   } 
 }
 

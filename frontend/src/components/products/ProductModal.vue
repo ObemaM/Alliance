@@ -17,7 +17,7 @@ interface ProductAttributeItem {
     value: string
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 const props = defineProps<{
     modelValue: boolean
@@ -157,12 +157,6 @@ const attributeItems = computed<ProductAttributeItem[]>(() => {
 })
 
 const formattedPrice = computed(() => formatPrice(props.product?.price))
-
-const tagItems = computed(() => {
-    return [resolvedCategoryName.value, resolvedMaterialName.value, resolvedCountryName.value].filter(
-        (item): item is string => Boolean(item),
-    )
-})
 
 watch(
     () => props.product?.id,
@@ -730,33 +724,32 @@ function handleAddToCart() {
 }
 
 .product-quantity {
-    display: flex;
-    align-items: center;
+    --qty-height: 44px;
+
+    display: inline-flex;
+    align-items: stretch;
+    height: var(--qty-height);
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
     background: #ffffff;
 }
 
 .qty-btn {
     width: 44px;
-    height: 48px;
-    border: 1px solid #1e1e1e;
+    height: 100%;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
     background: #1e1e1e;
     cursor: pointer;
     font-size: 18px;
+    line-height: 1;
     color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: background-color 0.2s ease, transform 0.2s ease;
-    border-radius: 10px;
-}
-
-.qty-btn:first-child {
-    border-radius: 10px 0 0 10px;
-}
-
-.qty-btn:last-child {
-    border-radius: 0 10px 10px 0;
-}
-
-.qty-btn:not(:first-child) {
-    border-left: none;
 }
 
 .qty-btn:hover:not(:disabled) {
@@ -765,16 +758,17 @@ function handleAddToCart() {
 
 .qty-btn:disabled {
     background: #9ca3af;
-    border-color: #9ca3af;
     cursor: not-allowed;
 }
 
 .qty-input {
     width: 50px;
-    height: 44px;
+    height: 100%;
+    padding: 0;
     border: none;
-    border-top: 1px solid #1e1e1e;
-    border-bottom: 1px solid #1e1e1e;
+    border-left: 1px solid #1e1e1e;
+    border-right: 1px solid #1e1e1e;
+    box-sizing: border-box;
     text-align: center;
     font-size: 15px;
     font-weight: 600;
