@@ -1,7 +1,250 @@
 {% extends "sqladmin/base.html" %}
 {% from 'sqladmin/_macros.html' import display_menu %}
 {% block body %}
+<style>
+  .admin-shell {
+    --admin-black: #1e1e1e;
+    --admin-black-hover: #111111;
+    --admin-bg: #f5f6f7;
+    --admin-surface: #ffffff;
+    --admin-border: #e5e7eb;
+    --admin-text: #1e1e1e;
+    --admin-muted: #6b7280;
+    --admin-sidebar-text: #f9fafb;
+    --admin-sidebar-muted: #9ca3af;
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  .admin-shell,
+  .admin-shell .page-wrapper,
+  .admin-shell .page-body {
+    background: var(--admin-bg);
+    color: var(--admin-text);
+  }
+
+  .admin-shell .page-wrapper {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .admin-shell a {
+    color: var(--admin-text);
+  }
+
+  .admin-shell .navbar-vertical {
+    background: var(--admin-black);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .admin-shell .navbar-vertical .navbar-brand,
+  .admin-shell .navbar-vertical .nav-link,
+  .admin-shell .navbar-vertical .dropdown-item,
+  .admin-shell .navbar-vertical h3,
+  .admin-shell .navbar-vertical span {
+    color: var(--admin-sidebar-text);
+  }
+
+  .admin-shell .navbar-vertical .nav-link {
+    border-radius: 10px;
+    margin-bottom: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .admin-shell .navbar-vertical .nav-link-icon {
+    color: #ffffff;
+    opacity: 0.96;
+  }
+
+  .admin-shell .navbar-vertical .nav-link-icon i {
+    color: inherit;
+    font-size: 1.05rem;
+  }
+
+  .admin-shell .navbar-vertical .nav-link:hover,
+  .admin-shell .navbar-vertical .nav-link.active,
+  .admin-shell .navbar-vertical .nav-link[aria-current="page"] {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+
+  .admin-shell .btn-admin-sidebar {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+  }
+
+  .admin-shell .btn-admin-sidebar:hover,
+  .admin-shell .btn-admin-sidebar:focus,
+  .admin-shell .btn-admin-sidebar:active {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+  }
+
+  .admin-shell .navbar-vertical .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .admin-shell .page-header {
+    margin-bottom: 1rem;
+  }
+
+  .admin-shell .page-title {
+    color: var(--admin-text);
+    font-weight: 700;
+  }
+
+  .admin-shell .page-pretitle,
+  .admin-shell .text-muted {
+    color: var(--admin-muted) !important;
+  }
+
+  .admin-shell .card,
+  .admin-shell #filter-sidebar {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(17, 24, 39, 0.06);
+  }
+
+  .admin-shell .card-header,
+  .admin-shell .card-footer {
+    background: var(--admin-surface);
+    border-color: var(--admin-border);
+  }
+
+  .admin-shell .table {
+    color: var(--admin-text);
+  }
+
+  .admin-shell .table thead th {
+    background: #fafafa;
+    color: var(--admin-text);
+    border-bottom-color: var(--admin-border);
+  }
+
+  .admin-shell .table td,
+  .admin-shell .table th {
+    border-color: var(--admin-border);
+  }
+
+  .admin-shell .table-hover tbody tr:hover {
+    background: #fafafa;
+  }
+
+  .admin-shell .form-control,
+  .admin-shell .form-select {
+    border-color: #d1d5db;
+    color: var(--admin-text);
+  }
+
+  .admin-shell .form-control:focus,
+  .admin-shell .form-select:focus {
+    border-color: var(--admin-black);
+    box-shadow: 0 0 0 0.2rem rgba(30, 30, 30, 0.12);
+  }
+
+  .admin-shell .dropdown-menu {
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    box-shadow: 0 12px 28px rgba(17, 24, 39, 0.12);
+  }
+
+  .admin-shell .dropdown-item:active,
+  .admin-shell .dropdown-item:focus,
+  .admin-shell .dropdown-item:hover {
+    background: #f3f4f6;
+    color: var(--admin-text);
+  }
+
+  .admin-shell .btn-admin-dark {
+    background: var(--admin-black);
+    border-color: var(--admin-black);
+    color: #ffffff;
+    transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  }
+
+  .admin-shell .btn-admin-dark:hover,
+  .admin-shell .btn-admin-dark:focus,
+  .admin-shell .btn-admin-dark:active {
+    background: #2f2f2f;
+    border-color: #2f2f2f;
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(17, 17, 17, 0.22);
+    transform: translateY(-1px);
+  }
+
+  .admin-shell .btn-admin-light {
+    background: #ffffff;
+    border: 1px solid var(--admin-border);
+    color: var(--admin-text);
+  }
+
+  .admin-shell .btn-admin-light:hover,
+  .admin-shell .btn-admin-light:focus,
+  .admin-shell .btn-admin-light:active {
+    background: #f9fafb;
+    color: var(--admin-text);
+    border-color: #d1d5db;
+  }
+
+  .admin-shell .btn-admin-danger {
+    background: #fff5f5;
+    border: 1px solid #f1c7c7;
+    color: #991b1b;
+  }
+
+  .admin-shell .btn-admin-danger:hover,
+  .admin-shell .btn-admin-danger:focus,
+  .admin-shell .btn-admin-danger:active {
+    background: #fee2e2;
+    border-color: #e5a9a9;
+    color: #7f1d1d;
+  }
+
+  .admin-shell .btn-admin-ghost {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: var(--admin-text);
+  }
+
+  .admin-shell .btn-admin-ghost:hover,
+  .admin-shell .btn-admin-ghost:focus,
+  .admin-shell .btn-admin-ghost:active {
+    background: #e5e7eb;
+    color: var(--admin-text);
+  }
+
+  .admin-shell .page-item.active .page-link {
+    background: var(--admin-black);
+    border-color: var(--admin-black);
+    color: #ffffff;
+  }
+
+  .admin-shell .page-link {
+    color: var(--admin-text);
+  }
+
+  .admin-shell .page-link:hover {
+    color: var(--admin-black);
+    background: #f3f4f6;
+  }
+
+  .admin-shell .admin-inline-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .admin-shell .admin-inline-actions .btn,
+  .admin-shell .admin-inline-actions input.btn {
+    min-width: 180px;
+  }
+</style>
 <div class="wrapper">
+  <div class="admin-shell w-100">
   <aside class="navbar navbar-expand-lg navbar-vertical navbar-expand-md navbar-dark">
     <div class="container-fluid">
       <h1 class="navbar-brand navbar-brand-autodark">
@@ -23,7 +266,7 @@
         </div>
       </nav>
       {% if admin.authentication_backend %}
-      <a href="{{ request.url_for('admin:logout') }}" class="btn btn-secondary btn-icon">
+      <a href="{{ request.url_for('admin:logout') }}" class="btn btn-admin-sidebar btn-icon">
         <i class="fa fa-sign-out"></i>
         <span>Выйти</span>
       </a>
@@ -50,6 +293,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </div>
 {% endblock %}

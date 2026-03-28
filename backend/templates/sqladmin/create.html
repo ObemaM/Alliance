@@ -1,5 +1,5 @@
 {% extends "sqladmin/layout.html" %}
-{% from 'sqladmin/_macros.html' import render_form_fields %}
+{% from 'sqladmin/_macros.html' import render_field, render_form_fields %}
 {% block content %}
 <div class="col-12">
   <div class="card">
@@ -21,33 +21,69 @@
           {% endif %}
         </div>
         <fieldset class="form-fieldset">
-          {{ render_form_fields(form, form_opts=form_opts) }}
           {% if model_view.identity == 'product' %}
-          <div class="row mt-3">
-            <div class="col-12">
-              <a class="btn" style="background-color: white; color: #202a3b; width: 300px; display: block; margin: 0;"
-                target="_blank" rel="noopener" href="{{ url_for('admin:create', identity='product-attribute') }}">
+          {% if form.hidden_tag is defined %}
+          {{ form.hidden_tag() }}
+          {% else %}
+          {% for f in form if f.widget.input_type == 'hidden' %}
+          {{ f }}
+          {% endfor %}
+          {% endif %}
+
+          {% for f in form if f.widget.input_type != 'hidden' %}
+          {% if f.name[:10] != 'attribute_' %}
+          {{ render_field(f) }}
+          {% endif %}
+          {% endfor %}
+
+          <div class="mb-3 form-group row">
+            <label class="form-label col-sm-2 col-form-label">Характеристики</label>
+            <div class="col-sm-10">
+              <div id="product-attribute-list">
+                {% for idx in range(1, model_view.attribute_slots + 1) %}
+                {% set attribute_id_field = form['attribute_id_' ~ idx] %}
+                {% set attribute_name_field = form['attribute_name_' ~ idx] %}
+                {% set attribute_value_field = form['attribute_value_' ~ idx] %}
+                {% set is_visible = idx == 1 or attribute_id_field.data or attribute_name_field.data or attribute_value_field.data %}
+                <div class="product-attribute-row border rounded-3 p-3 mb-2" data-attribute-row {% if not is_visible %}hidden{% endif %}>
+                  <div class="row g-2 align-items-end">
+                    <div class="col-md-4">
+                      <label class="form-label">{{ attribute_id_field.label.text }}</label>
+                      {{ attribute_id_field(class_="form-select") }}
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">{{ attribute_name_field.label.text }}</label>
+                      {{ attribute_name_field(class_="form-control") }}
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">{{ attribute_value_field.label.text }}</label>
+                      {{ attribute_value_field(class_="form-control") }}
+                    </div>
+                    <div class="col-md-1 d-grid">
+                      <button type="button" class="btn btn-admin-light" data-remove-attribute-row>&times;</button>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              <button type="button" class="btn btn-admin-light btn-sm" data-add-attribute-row>
                 + Добавить характеристику
-              </a>
-            </div>
-            <div class="col-12 pt-2">
-              <a class="btn" style="background-color: white; color: #202a3b; width: 300px; display: block; margin: 0;"
-                target="_blank" rel="noopener" href="{{ url_for('admin:create', identity='product-image') }}">
-                + Добавить изображение
-              </a>
+              </button>
             </div>
           </div>
+          {% else %}
+          {{ render_form_fields(form, form_opts=form_opts) }}
           {% endif %}
         </fieldset>
         <div class="row">
           <div class="col-md-2">
-            <a href="{{ url_for('admin:list', identity=model_view.identity) }}" class="btn">
+            <a href="{{ url_for('admin:list', identity=model_view.identity) }}" class="btn btn-admin-light">
               Отмена
             </a>
           </div>
           <div class="col-md-8">
-            <div class="btn-group flex-wrap" data-toggle="buttons">
-              <input type="submit" name="save" value="Сохранить" class="btn">
+            <div class="admin-inline-actions" data-toggle="buttons">
+              <input type="submit" name="save" value="Сохранить" class="btn btn-admin-dark">
             </div>
           </div>
         </div>
@@ -55,4 +91,79 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block tail %}
+{{ super() }}
+{% if model_view.identity == 'product' %}
+<script>
+  (() => {
+    const list = document.getElementById('product-attribute-list');
+    const addButton = document.querySelector('[data-add-attribute-row]');
+    if (!list || !addButton) return;
+
+    const rows = Array.from(list.querySelectorAll('[data-attribute-row]'));
+    const NEW_ATTRIBUTE_VALUE = '-1';
+
+    const syncAttributeMode = (row) => {
+      const select = row.querySelector('select');
+      const textInput = row.querySelector('input[name^="attribute_name_"]');
+      if (!select || !textInput) return;
+
+      const isCustomAttribute = select.value === NEW_ATTRIBUTE_VALUE;
+      textInput.disabled = !isCustomAttribute;
+
+      if (!isCustomAttribute) {
+        textInput.value = '';
+      }
+    };
+
+    const updateAddButton = () => {
+      const hiddenRow = rows.find((row) => row.hidden);
+      addButton.disabled = !hiddenRow;
+    };
+
+    const clearRow = (row) => {
+      row.querySelectorAll('select').forEach((field) => {
+        field.value = '0';
+      });
+      row.querySelectorAll('input').forEach((field) => {
+        field.value = '';
+      });
+      syncAttributeMode(row);
+    };
+
+    addButton.addEventListener('click', () => {
+      const hiddenRow = rows.find((row) => row.hidden);
+      if (!hiddenRow) return;
+      hiddenRow.hidden = false;
+      syncAttributeMode(hiddenRow);
+      updateAddButton();
+    });
+
+    rows.forEach((row, index) => {
+      const select = row.querySelector('select');
+      const removeButton = row.querySelector('[data-remove-attribute-row]');
+      if (select) {
+        select.addEventListener('change', () => syncAttributeMode(row));
+        syncAttributeMode(row);
+      }
+      if (!removeButton) return;
+
+      removeButton.addEventListener('click', () => {
+        const visibleRows = rows.filter((item) => !item.hidden);
+        if (visibleRows.length === 1 && index === 0) {
+          clearRow(row);
+          return;
+        }
+
+        clearRow(row);
+        row.hidden = true;
+        updateAddButton();
+      });
+    });
+
+    updateAddButton();
+  })();
+</script>
+{% endif %}
 {% endblock %}

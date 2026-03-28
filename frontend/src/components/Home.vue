@@ -580,8 +580,6 @@ onMounted(() => {
 }
 
 .filters__title {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
   color: #ffffff;
   padding: 16px;
   background-color: #1e1e1e;

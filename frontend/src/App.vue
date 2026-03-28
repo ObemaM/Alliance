@@ -409,7 +409,7 @@ onMounted(() => {
   }
   
   .alliance__text {
-    margin-top: 12px;
+    margin-top: 4px;
     font-size: 14px;
     line-height: 1.6;
     color: #9ca3af;
@@ -433,7 +433,7 @@ onMounted(() => {
   .bottom__links {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 1.6px;
   }
 
   .bottom__links a {

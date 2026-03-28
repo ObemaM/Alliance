@@ -12,7 +12,7 @@
                 {% if model_view.can_export %}
                 {% if model_view.export_types | length > 1 %}
                 <div class="ms-3 d-inline-block dropdown">
-                  <a href="#" class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                  <a href="#" class="btn btn-admin-light dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     Экспорт
                   </a>
@@ -27,7 +27,7 @@
                 {% elif model_view.export_types | length == 1 %}
                 <div class="ms-3 d-inline-block">
                   <a href="{{ url_for('admin:export', identity=model_view.identity, export_type=model_view.export_types[0]) }}"
-                    class="btn btn-secondary">
+                    class="btn btn-admin-light">
                     Экспорт
                   </a>
                 </div>
@@ -35,7 +35,7 @@
                 {% endif %}
                 {% if model_view.can_create %}
                 <div class="ms-3 d-inline-block">
-                  <a href="{{ url_for('admin:create', identity=model_view.identity) }}" class="btn btn-primary">
+                  <a href="{{ url_for('admin:create', identity=model_view.identity) }}" class="btn btn-admin-dark">
                     + Добавить {{ model_view.name|lower }}
                   </a>
                 </div>
@@ -46,7 +46,7 @@
               <div class="d-flex justify-content-between">
                 <div class="dropdown col-4">
                   <button {% if not model_view.can_delete and not model_view._custom_actions_in_list %} disabled {% endif %}
-                    class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    class="btn btn-admin-ghost dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     Действия
                   </button>
@@ -79,8 +79,8 @@
                     <input id="search-input" type="text" class="form-control"
                       placeholder="Поиск: {{ model_view.search_placeholder() }}"
                       value="{{ request.query_params.get('search', '') }}">
-                    <button id="search-button" class="btn" type="button">Найти</button>
-                    <button id="search-reset" class="btn" type="button" {% if not request.query_params.get('search')
+                    <button id="search-button" class="btn btn-admin-dark" type="button">Найти</button>
+                    <button id="search-reset" class="btn btn-admin-light" type="button" {% if not request.query_params.get('search')
                       %}disabled{% endif %}><i class="fa-solid fa-times"></i></button>
                   </div>
                 </div>
@@ -200,7 +200,7 @@
               </ul>
               <div class="dropdown text-muted">
                 Показывать
-                <a href="#" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                <a href="#" class="btn btn-sm btn-admin-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                   aria-expanded="false">
                   {{ request.query_params.get("pageSize") or model_view.page_size }} / стр.
                 </a>
@@ -248,7 +248,7 @@
                     </select>
                     <input type="text" name="{{ filter.parameter_name }}" value="{{ current_filter }}" class="form-control"
                       placeholder="Значение">
-                    <button type="submit" class="btn btn-primary btn-sm">Применить</button>
+                    <button type="submit" class="btn btn-admin-dark btn-sm">Применить</button>
                   </form>
                 </div>
               </div>
@@ -271,7 +271,7 @@
                     {% endfor %}
                     <input type="text" name="{{ filter.parameter_name }}" value="{{ current_filter }}" class="form-control"
                       placeholder="Значение">
-                    <button type="submit" class="btn btn-primary btn-sm">Применить</button>
+                    <button type="submit" class="btn btn-admin-dark btn-sm">Применить</button>
                   </form>
                 </div>
               </div>
@@ -285,4 +285,16 @@
     </div>
   </div>
 </div>
+{% if model_view.can_delete %}
+{% include 'sqladmin/modals/delete.html' %}
+{% endif %}
+
+{% for custom_action in model_view._custom_actions_in_list %}
+{% if custom_action in model_view._custom_actions_confirmation %}
+{% with confirmation_message = model_view._custom_actions_confirmation[custom_action], custom_action=custom_action,
+url=model_view._url_for_action(request, custom_action) %}
+{% include 'sqladmin/modals/list_action_confirmation.html' %}
+{% endwith %}
+{% endif %}
+{% endfor %}
 {% endblock %}

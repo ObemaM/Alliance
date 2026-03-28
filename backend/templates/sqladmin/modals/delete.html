@@ -1,0 +1,54 @@
+<div class="modal modal-blur fade" id="modal-delete" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Подтверждение удаления</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-delete-text" class="text-muted">
+          Эта запись будет удалена без возможности восстановления.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-admin-light" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-admin-danger" id="modal-delete-button">Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  (() => {
+    const buildDeleteText = (trigger) => {
+      const itemName = trigger?.getAttribute('data-name') || 'запись';
+      const itemPk = trigger?.getAttribute('data-pk');
+
+      if (itemPk) {
+        return `Запись "${itemName} ${itemPk}" будет удалена без возможности восстановления.`;
+      }
+
+      const selectedCount = document.querySelectorAll('.select-box:checked').length;
+      if (selectedCount > 0) {
+        return `Будут удалены выбранные записи (${selectedCount} шт.) без возможности восстановления.`;
+      }
+
+      return 'Эта запись будет удалена без возможности восстановления.';
+    };
+
+    if (window.jQuery) {
+      window.jQuery(document).on('shown.bs.modal', '#modal-delete', function (event) {
+        const text = buildDeleteText(event.relatedTarget);
+        window.jQuery('#modal-delete-text').text(text);
+      });
+      return;
+    }
+
+    const modal = document.getElementById('modal-delete');
+    const modalText = document.getElementById('modal-delete-text');
+    if (!modal || !modalText) return;
+
+    modal.addEventListener('shown.bs.modal', (event) => {
+      modalText.textContent = buildDeleteText(event.relatedTarget);
+    });
+  })();
+</script>
