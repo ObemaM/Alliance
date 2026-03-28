@@ -42,9 +42,7 @@ const displayedContent = computed(() =>
 .site-page__card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 20px;
   padding: 32px;
-  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
 }
 
 .site-page__eyebrow {
